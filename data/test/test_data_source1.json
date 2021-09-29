@@ -1,0 +1,12 @@
+{
+  "name": "data_source_ref",
+  "keys": ["isin"],
+  "cleaner": {"useCleaner": "true", "keepOriginalData":"true"},
+  "other_keys": ["company_name"],
+  "attributes":{
+      "ISIN": "isin",
+      "COMPANY": "company_name",
+      "COUNTRY": "country"
+  }
+}
+

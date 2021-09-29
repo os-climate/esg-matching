@@ -1,0 +1,14 @@
+{
+  "name": "data_source_target2",
+  "keys": ["isin", "sedol"],
+  "cleaner": {"useCleaner": "true", "keepOriginalData":"true"},
+  "other_keys": ["lei"],
+  "attributes":{
+      "ISIN": "isin",
+      "LEI": "lei",
+      "SEDOL": "sedol",
+      "COMPANY_NAME": "company_name",
+      "COUNTRY": "country"
+  }
+}
+

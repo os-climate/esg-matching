@@ -1,0 +1,13 @@
+{
+  "name": "data_source_target1",
+  "keys": ["isin", "lei"],
+  "cleaner": {"useCleaner": "true", "keepOriginalData":"true"},
+  "other_keys": ["lei"],
+  "attributes":{
+      "ISIN": "isin",
+      "LEI": "lei",
+      "NAME": "company_name",
+      "COUNTRY_CODE": "country"
+  }
+}
+
