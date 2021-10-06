@@ -1,9 +1,11 @@
 {
   "name": "data_source_ref",
-  "keys": ["isin"],
   "cleaner": {"useCleaner": "true", "keepOriginalData":"true"},
-  "other_keys": ["company_name"],
+  "matching_keys": ["isin"],
+  "coverage_key": "unique_id",
+  "indirect_matching_keys": ["company_name"],
   "attributes":{
+      "UNIQUE_ID": "unique_id",
       "ISIN": "isin",
       "COMPANY": "company_name",
       "COUNTRY": "country"

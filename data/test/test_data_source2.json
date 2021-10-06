@@ -1,9 +1,11 @@
 {
   "name": "data_source_target1",
-  "keys": ["isin", "lei"],
   "cleaner": {"useCleaner": "true", "keepOriginalData":"true"},
-  "other_keys": ["lei"],
+  "matching_keys": ["isin", "lei"],
+  "coverage_key": "unique_id",
+  "indirect_matching_keys": ["lei"],
   "attributes":{
+      "UNIQUE_ID": "unique_id",
       "ISIN": "isin",
       "LEI": "lei",
       "NAME": "company_name",
