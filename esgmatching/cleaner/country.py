@@ -6,6 +6,7 @@ import numpy as np
 import re
 
 # Import third-party libraries
+import hdx
 from hdx.location.country import Country
 
 # Import internal libraries

@@ -214,9 +214,9 @@ class EntityDataSource(ABC):
 
         # Initialize the class attributes with the json content
         # These metadata information are mandatory
-        if 'name' in mapping and 'keys' in mapping and 'attributes' in mapping:
+        if 'name' in mapping and 'matching_keys' in mapping and 'attributes' in mapping:
             self._name = mapping['name']
-            self._keys = mapping['keys']
+            self._keys = mapping['matching_keys']
             self._dict_attributes = mapping['attributes']
         else:
             raise IllFormedMappingFile

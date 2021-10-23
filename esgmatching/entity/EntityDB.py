@@ -278,7 +278,7 @@ class EntityDB(EntityDataSource):
         except Exception as e:
             # Customize the error message
             original_msg = getattr(e, 'message', repr(e))
-            exception_msg = original_msg + ' - ' + 'Error creating table [{}].'
+            exception_msg = original_msg + ' - ' + 'Error creating table [{table_name}].'.format(table_name=self._table_name)
             raise ErrorDB(exception_msg)
 
     def convert_to_db_row(self, row_data, rename_row_data=True):

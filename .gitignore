@@ -51,3 +51,5 @@ target/
 
 # Pycharm
 .idea
+data/database/entitymatching.db
+**/.ipynb_checkpoints/*
