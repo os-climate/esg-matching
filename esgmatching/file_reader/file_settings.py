@@ -30,6 +30,8 @@ class JsonSettings:
             map_to_matching (dict): dictionary that maps some datasource attributes to attributes in the matching
                 table. The dict keys are are the attribute names in the matching table, while the items are the
                 attribute names in the database table for the datasource.
+            map_indirect_matching (dict): dictionary with the association between target and referential columns that
+                need to be switched when performing the indirect matching.
             matching_policy (dict): dictionary that describe the matching policies.
     """
 
@@ -52,6 +54,7 @@ class JsonSettings:
         self.matching_id = ''
         self.matching_alias = None
         self.map_to_matching = None
+        self.map_indirect_matching = None
 
         # Matching policies
         self.matching_policy = None
@@ -158,6 +161,12 @@ class JsonSettings:
                 value_dict = dict(sub_dict['map_to_matching'])
                 if len(value_dict) > 0:
                     self.map_to_matching = value_dict
+                else:
+                    raise exceptions_settings.FieldsMappingToMatchingTableNotDefined
+            if 'map_indirect_matching' in sub_dict:
+                value_dict = dict(sub_dict['map_indirect_matching'])
+                if len(value_dict) > 0:
+                    self.map_indirect_matching = value_dict
                 else:
                     raise exceptions_settings.FieldsMappingToMatchingTableNotDefined
         else:

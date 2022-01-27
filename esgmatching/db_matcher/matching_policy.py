@@ -130,12 +130,9 @@ class MatchingPolicy:
             Raises:
                 exceptions_data_source.DataSourceNotSynchronizedWithDbTable when the matching datasource is not
                     synchronized with its correspondent database table.
-                exceptions_data_source.AliasNotInDataSource when some alias is not mapped in the referential source.
         """
         if not ref_source.is_sync_with_db_table():
             raise exceptions_data_source.DataSourceNotSynchronizedWithDbTable
-        if not ref_source.is_valid_aliases(self._all_aliases):
-            raise exceptions_data_source.AliasNotInDataSource
         self._referencial_ds = ref_source
 
     def set_matching_source(self, matching_source: DbDataSource):

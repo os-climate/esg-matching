@@ -20,6 +20,7 @@ class DbMatchDataSource(DbDataSource):
                     values can be: 'match' or 'no-match'
     """
 
+    __AUTO_COLUMNS = ['TIMESTAMP', 'MATCHING_ID']
     __NO_MATCHING_STD_ATTRIBUTES = {'TGT_NAME': 'TGT_NAME'}
     __MATCHING_STD_ATTRIBUTES = {'REF_NAME': 'REF_NAME',
                                  'TGT_NAME': 'TGT_NAME',
@@ -41,9 +42,11 @@ class DbMatchDataSource(DbDataSource):
                 No exception is raised.
         """
         super().__init__(db_connector, name)
+        self._auto_columns = self.__AUTO_COLUMNS
         self._ds_match_type = ''
         self._std_attributes = None
         self._matching_id = ''
+        self._map_indirect_matching = None
 
     @property
     def match_type(self):
@@ -66,6 +69,14 @@ class DbMatchDataSource(DbDataSource):
     @matching_id.setter
     def matching_id(self, matching_id: str):
         self._matching_id = matching_id
+
+    @property
+    def map_indirect_matching(self):
+        return self._map_indirect_matching
+
+    @map_indirect_matching.setter
+    def map_indirect_matching(self, map_indirect_matching: str):
+        self._map_indirect_matching = map_indirect_matching
 
     def change_std_attribute_name(self, key_std_attribute: str, new_name: str):
         """

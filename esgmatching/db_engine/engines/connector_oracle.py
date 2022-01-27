@@ -205,7 +205,7 @@ class OracleConnector(DbConnector):
             Raises:
                 No exception is raised.
         """
-        column_object = sa.Column(column_name, sa.Numeric, sa.Identity, primary_key=True)
+        column_object = sa.Column(column_name, oracle.NUMBER, sa.Identity(start=1), primary_key=True)
         return column_object
 
     def get_auto_timestamp_column(self, column_name):

@@ -200,6 +200,32 @@ class DbMatcher(ABC):
         """
         pass
 
+    def _add_literal_cols_type_match(self, rule_name, list_to_add_to: list):
+        """
+            Private class method that helps to build the literal columns of the matching table. This method
+                complements the _get_literal_cols_match() method as to add the additional matching columns that
+                describe the type of matching perfomed.
+
+            Parameters:
+                rule_name (str) : the name of the matching rule is passed as parameter because it is itself a fixed
+                    value for one of the standard attribute 'MATCHING_RULE'.
+
+            Returns:
+                literal_db_cols (list): list of sqlalchemy.sql.schema.Column objects with fixed values.
+
+            Raises:
+                No exception is raised.
+        """
+        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_TYPE')
+        list_to_add_to.append(self._column_builder.create_literal_column(self._literal_matching_type, name_std_col))
+
+        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_SCOPE')
+        list_to_add_to.append(self._column_builder.create_literal_column(self._literal_matching_scope, name_std_col))
+
+        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_RULE')
+        list_to_add_to.append(self._column_builder.create_literal_column(rule_name, name_std_col))
+        return list_to_add_to
+
     def _get_literal_cols_match(self, rule_name):
         """
             Private class method that builds the literal columns of the matching table. Literal columns are the ones
@@ -227,14 +253,7 @@ class DbMatcher(ABC):
         name_std_col = self._matching_source.get_std_attribute_name('TGT_NAME')
         literal_db_cols.append(self._column_builder.create_literal_column(tgt_name, name_std_col))
 
-        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_TYPE')
-        literal_db_cols.append(self._column_builder.create_literal_column(self._literal_matching_type, name_std_col))
-
-        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_SCOPE')
-        literal_db_cols.append(self._column_builder.create_literal_column(self._literal_matching_scope, name_std_col))
-
-        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_RULE')
-        literal_db_cols.append(self._column_builder.create_literal_column(rule_name, name_std_col))
+        literal_db_cols = self._add_literal_cols_type_match(rule_name, literal_db_cols)
 
         literal_name_cols = self._matching_source.get_std_attribute_names()
         return literal_db_cols, literal_name_cols

@@ -76,7 +76,6 @@ class DbMatcherIfm(DbMatcher):
         """
         # Build the condition for the join and where clauses
         join_condition = None
-        where_condition = None
         for alias_attribute in attribute_rules:
             tgt_col_name = self._tgt_source.get_matching_attribute_by_alias(alias_attribute)
             left_db_col = self._no_matching_source.get_table_column(tgt_col_name)
@@ -88,17 +87,45 @@ class DbMatcherIfm(DbMatcher):
             else:
                 self._join_condition_builder = self._join_condition_builder.and_condition(join_condition)
                 join_condition = self._join_condition_builder.get_condition()
-        tgt_name = self._tgt_source.name
-        tgt_db_name = self._no_matching_source.get_table_column('TGT_NAME')
-        self._where_condition_builder = self._where_condition_builder.create_condition()
-        self._where_condition_builder = self._where_condition_builder.equal_value(tgt_db_name, tgt_name)
-        where_condition = self._where_condition_builder.get_condition()
 
-        tgt_db_name = self._matching_source.get_table_column('TGT_NAME')
+        # Build where clause
+        # WHERE no-matching.datasource = 'datasource_name' ....
+        tgt_name = self._tgt_source.name
+
+        no_match_tgt = self._no_matching_source.get_table_column('TGT_NAME')
         self._where_condition_builder = self._where_condition_builder.create_condition()
-        self._where_condition_builder = self._where_condition_builder.not_equal_value(tgt_db_name, tgt_name)
-        self._where_condition_builder = self._where_condition_builder.and_condition(where_condition)
+        self._where_condition_builder = self._where_condition_builder.equal_value(no_match_tgt, tgt_name)
+        first_condition = self._where_condition_builder.get_condition()
+
+        # ...AND matching.datasource != 'datasource_name'
+        match_tgt = self._matching_source.get_table_column('TGT_NAME')
+        self._where_condition_builder = self._where_condition_builder.create_condition()
+        self._where_condition_builder = self._where_condition_builder.not_equal_value(match_tgt, tgt_name)
+        where_condition = self._where_condition_builder.and_condition(first_condition).get_condition()
         return join_condition, where_condition
+
+    def _get_literal_cols_match(self, rule_name):
+        """
+            Private class method that builds the literal columns of the matching table. Literal columns are the ones
+                holding fixed values and defined in the matching datasource as standard attributes. See the
+                DbMatchDataSource object for more details on the pre-defined standard attributes.
+
+            Parameters:
+                rule_name (str) : the name of the matching rule is passed as parameter because it is itself a fixed
+                    value for one of the standard attribute 'MATCHING_RULE'.
+
+            Returns:
+                literal_db_cols (list): list of sqlalchemy.sql.schema.Column objects with fixed values.
+                literal_name_cols (list): list with the names of all literal columns created.
+
+            Raises:
+                No exception is raised.
+        """
+        literal_db_cols = []
+        literal_db_cols = self._add_literal_cols_type_match(rule_name, literal_db_cols)
+        literal_name_cols = ['MATCHING_TYPE', 'MATCHING_SCOPE', 'MATCHING_RULE']
+
+        return literal_db_cols, literal_name_cols
 
     def _get_cols_match(self, rule_name):
         """
@@ -121,20 +148,26 @@ class DbMatcherIfm(DbMatcher):
                 No exception is raised.
         """
         literal_db_cols, literal_name_cols = self._get_literal_cols_match(rule_name)
-        no_match_name_cols = self._tgt_source.get_name_cols_mapped_to_matching()
+        no_match_name_cols = self._no_matching_source.get_attribute_names(remove_auto_cols=True)
         no_match_db_cols = self._no_matching_source.get_db_cols_with_same_name(no_match_name_cols)
-        ref_db_cols = self._ref_source.get_db_cols_mapped_to_matching()
-        ref_name_cols = self._ref_source.get_name_cols_mapped_to_matching()
-        select_db_cols = literal_db_cols + no_match_db_cols + ref_db_cols
-        select_name_cols = literal_name_cols + no_match_name_cols + ref_name_cols
-        return select_db_cols, select_name_cols
 
-    def _get_cols_no_match(self):
-        literal_db_cols, literal_name_cols = self._get_literal_cols_no_match()
-        tgt_db_cols = self._tgt_source.get_db_cols_mapped_to_no_matching()
-        tgt_name_cols = self._tgt_source.get_name_cols_mapped_to_no_matching()
-        select_db_cols = literal_db_cols + tgt_db_cols
-        select_name_cols = literal_name_cols + tgt_name_cols
+        # Get the columns in the matching table that are not in no_match_name_cols list
+        all_col_names_in_matching = self._matching_source.get_attribute_names(remove_auto_cols=True)
+        dict_indirect_matching = self._matching_source.map_indirect_matching
+        match_name_cols = []
+        match_db_cols = []
+        for col_name in all_col_names_in_matching:
+            if col_name not in no_match_name_cols and col_name not in literal_name_cols:
+                if col_name in dict_indirect_matching:
+                    label_col = col_name
+                    col_name = dict_indirect_matching[label_col]
+                else:
+                    label_col = col_name
+                db_col = self._matching_source.get_table_column(col_name, label_col)
+                match_db_cols.append(db_col)
+                match_name_cols.append(label_col)
+        select_db_cols = literal_db_cols + no_match_db_cols + match_db_cols
+        select_name_cols = literal_name_cols + no_match_name_cols + match_name_cols
         return select_db_cols, select_name_cols
 
     def execute_matching(self):
@@ -168,7 +201,7 @@ class DbMatcherIfm(DbMatcher):
             # Build the select statement
             self._select_builder = self._select_builder.create_select(select_db_cols)
             self._select_builder = self._select_builder.from_table(self._no_matching_table)
-            self._select_builder = self._select_builder.join_table(self._ref_table).join_on(join_condition)
+            self._select_builder = self._select_builder.join_table(self._matching_table).join_on(join_condition)
             self._select_builder = self._select_builder.where_condition(where_condition)
             select_stm = self._select_builder.build_statement()
 
@@ -181,14 +214,16 @@ class DbMatcherIfm(DbMatcher):
             # ------ NO-MATCHING PROCESS ------
             # DELETE MATCHING RESULTS FROM NO-MATCHING TABLE
             # Build the select statement
-            # self._select_builder = self._select_builder.create_select(select_db_cols).from_table(self._tgt_table)
-            # self._select_builder = self._select_builder.join_table(self._ref_table).join_on(join_condition, 'left')
-            # self._select_builder = self._select_builder.where_condition(where_condition)
-            # select_stm = self._select_builder.build_statement()
-            # self._delete_builder = self._delete_builder.create_delete().from_table(self._no_matching_table)
-            # self._delete_builder = self._delete_builder.where_condition(select_stm)
-            # no_matching_db_cols = self._no_matching_source.get_db_cols_with_same_name(select_name_cols)
-            # self._dml_manager.insert_into_from_select(self._no_matching_table, no_matching_db_cols, select_stm)
+            col_matching_id_name = self._no_matching_source.matching_id
+            col_matching_id_db = self._no_matching_source.get_table_column(col_matching_id_name)
+            self._select_builder = self._select_builder.create_select(col_matching_id_db)\
+                .from_table(self._no_matching_table).join_table(self._matching_table).join_on(join_condition)\
+                .where_condition(where_condition)
+            select_stm = self._select_builder.build_statement()
+            self._delete_builder = self._delete_builder.create_delete().from_table(self._no_matching_table)\
+                .where_in_condition(col_matching_id_db, select_stm)
+            delete_stm = self._delete_builder.build_statement()
+            self._dml_manager.delete_data(delete_stm)
 
             # Commit changes
             self._db_connector.commit_changes()

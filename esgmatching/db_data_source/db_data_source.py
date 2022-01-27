@@ -58,6 +58,7 @@ class DbDataSource:
         self._matching_policies_settings = {}
         self._dml_manager = DmlManager(db_connector)
         self._dql_manager = DqlManager(db_connector)
+        self._auto_columns = None
 
     @property
     def name(self):
@@ -86,6 +87,14 @@ class DbDataSource:
     @matching_role.setter
     def matching_role(self, new_matching_role: str):
         self._matching_role = new_matching_role
+
+    @property
+    def auto_columns(self):
+        return self._auto_columns
+
+    @auto_columns.setter
+    def auto_columns(self, auto_columns: list):
+        self._auto_columns = auto_columns
 
     def _set_primary_keys(self):
         """
@@ -199,7 +208,7 @@ class DbDataSource:
             raise exceptions_data_source.AttributesNotDefinedInDataSource
         return list(self._original_attributes_to_ds.keys())
 
-    def get_attribute_names(self):
+    def get_attribute_names(self, remove_auto_cols=False):
         """
             Class method that returns the attribute names associated with the reflected database table.
 
@@ -215,7 +224,15 @@ class DbDataSource:
         """
         if len(self._original_attributes_to_ds) == 0:
             raise exceptions_data_source.AttributesNotDefinedInDataSource
-        return list(self._original_attributes_to_ds.values())
+        col_names = []
+        if remove_auto_cols and self._auto_columns is not None:
+            all_columns = list(self._original_attributes_to_ds.values())
+            for col_name in all_columns:
+                if col_name not in self._auto_columns:
+                    col_names.append(col_name)
+        else:
+            col_names = list(self._original_attributes_to_ds.values())
+        return col_names
 
     def get_primary_keys(self):
         """

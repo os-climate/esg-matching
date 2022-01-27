@@ -113,6 +113,7 @@ class EtlProcessing:
             self._data_source = DbMatchDataSource(self._db_connector, self._file.settings.datasource_name)
             self._data_source.match_type = self._file.settings.matching_role
             self._data_source.matching_id = self._file.settings.matching_id
+            self._data_source.map_indirect_matching = self._file.settings.map_indirect_matching
         self._data_source.table_name = self._file.settings.datasource_table_name
         self._data_source.matching_role = self._file.settings.matching_role
 
