@@ -4,8 +4,6 @@
 from datetime import datetime
 from abc import ABC
 
-import pandas as pd
-
 
 class ReportManager(ABC):
     """

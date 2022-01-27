@@ -4,7 +4,7 @@
 import datetime
 
 # Import internal libraries
-from esgmatching.report.ReportManager import ReportManager
+from esgmatching.report.report_manager import ReportManager
 
 
 class ReportOnMatching(ReportManager):
