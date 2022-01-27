@@ -1,0 +1,26 @@
+{
+  "data_source": {
+    "name": "DS_MATCHING",
+    "table_name": "ESG_MATCHING",
+    "create_table": "True",
+    "if_table_exists": "drop",
+    "attributes": {
+      "TIMESTAMP":  ["TIMESTAMP","auto-timestamp"],
+      "REF_NAME":  ["REF_NAME","VARCHAR2", "255"],
+      "TGT_NAME":  ["TGT_NAME","VARCHAR2", "20"],
+      "MATCHING_TYPE":  ["MATCHING_TYPE","VARCHAR2", "20"],
+      "MATCHING_SCOPE":  ["MATCHING_SCOPE","VARCHAR2", "20"],
+      "MATCHING_RULE":  ["MATCHING_RULE","VARCHAR2", "20"],
+      "REF_ID":  ["REF_ID","VARCHAR2", "255"],
+      "REF_COMPANY":  ["REF_COMPANY", "VARCHAR2", "255"],
+      "REF_COUNTRY": ["REF_COUNTRY", "VARCHAR2", "255"],
+      "TGT_ID":  ["TGT_ID","VARCHAR2", "255"],
+      "TGT_COMPANY":  ["TGT_COMPANY", "VARCHAR2", "255"],
+      "TGT_COUNTRY": ["TGT_COUNTRY", "VARCHAR2", "255"],
+      "ISIN":  ["ISIN", "VARCHAR2", "12"],
+      "LEI":  ["LEI", "VARCHAR2", "20"],
+      "SEDOL":  ["SEDOL", "VARCHAR2", "20"]
+    },
+    "matching_role": "matching"
+  }
+}
