@@ -6,6 +6,7 @@
     "if_table_exists": "drop",
     "attributes": {
       "TIMESTAMP":  ["TIMESTAMP","auto-timestamp"],
+      "MATCHING_ID":  ["MATCHING_ID","auto-id"],
       "REF_NAME":  ["REF_NAME","VARCHAR2", "255"],
       "TGT_NAME":  ["TGT_NAME","VARCHAR2", "20"],
       "MATCHING_TYPE":  ["MATCHING_TYPE","VARCHAR2", "20"],
@@ -21,6 +22,13 @@
       "LEI":  ["LEI", "VARCHAR2", "20"],
       "SEDOL":  ["SEDOL", "VARCHAR2", "20"]
     },
-    "matching_role": "matching"
+    "matching_role": "matching",
+    "matching_id": "MATCHING_ID",
+    "map_indirect_matching": {
+      "REF_NAME":  "TGT_NAME",
+      "REF_ID":  "TGT_ID",
+      "REF_COMPANY":  "TGT_COMPANY",
+      "REF_COUNTRY":  "TGT_COUNTRY"
+    }
   }
 }

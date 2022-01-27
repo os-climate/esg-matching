@@ -47,6 +47,8 @@
       },
       "ifm": {
         "isin":  ["ISIN"],
+        "lei":  ["LEI"],
+        "sedol":  ["SEDOL"],
         "name+country":  ["COMPANY", "COUNTRY"]
       }
     }

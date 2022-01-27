@@ -44,6 +44,7 @@
       },
       "ifm": {
         "isin":  ["ISIN"],
+        "lei":  ["LEI"],
         "name+country":  ["COMPANY", "COUNTRY"]
       }
     }

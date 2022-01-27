@@ -28,12 +28,6 @@
       "REF_ID":  "UNIQUE_ID",
       "REF_COMPANY":  "COMPANY",
       "REF_COUNTRY":  "COUNTRY"
-    },
-    "map_indirect_matching": {
-      "REF_NAME":  "TGT_NAME",
-      "REF_ID":  "TGT_ID",
-      "REF_COMPANY":  "TGT_COMPANY",
-      "REF_COUNTRY":  "TGT_COUNTRY"
     }
   }
 }
