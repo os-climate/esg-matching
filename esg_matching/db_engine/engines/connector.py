@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 # Import internal modules
-from esgmatching.exceptions import exceptions_db_engine
+from esg_matching.exceptions import exceptions_db_engine
 
 
 class DbConnector(ABC):

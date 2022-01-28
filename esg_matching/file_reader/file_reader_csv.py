@@ -5,8 +5,8 @@ from csv import DictReader
 from typing import NamedTuple
 
 # Import internal libraries
-from esgmatching.file_reader.file_reader import FileReader
-from esgmatching.exceptions import exceptions_file
+from esg_matching.file_reader.file_reader import FileReader
+from esg_matching.exceptions import exceptions_file
 
 
 class FileReaderCsv(FileReader):

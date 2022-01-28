@@ -2,12 +2,12 @@
 
 import pandas as pd
 
-from esgmatching.db_engine.engines.connector import DbConnector
-from esgmatching.db_engine.executor.dql_manager import DqlManager
-from esgmatching.db_engine.executor.dml_manager import DmlManager
-from esgmatching.db_engine.builders.table_builder import TableBuilder
-from esgmatching.db_engine.builders.column_builder import ColumnBuilder
-from esgmatching.exceptions import exceptions_data_source
+from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.db_engine.executor.dql_manager import DqlManager
+from esg_matching.db_engine.executor.dml_manager import DmlManager
+from esg_matching.db_engine.builders.table_builder import TableBuilder
+from esg_matching.db_engine.builders.column_builder import ColumnBuilder
+from esg_matching.exceptions import exceptions_data_source
 
 
 class DbDataSource:

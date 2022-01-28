@@ -6,8 +6,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import oracle
 
 # Import internal modules
-from esgmatching.db_engine.engines.connector import DbConnector
-from esgmatching.exceptions import exceptions_db_engine
+from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.exceptions import exceptions_db_engine
 
 
 class OracleConnector(DbConnector):

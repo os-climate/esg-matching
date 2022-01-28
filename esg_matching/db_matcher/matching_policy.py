@@ -1,9 +1,9 @@
 """ Base class allows to create policies (rules) to perform matchings on database """
 
 # Import internal modules
-from esgmatching.db_data_source.db_data_source import DbDataSource
-from esgmatching.exceptions import exceptions_data_source
-from esgmatching.exceptions import exceptions_matching_policy
+from esg_matching.db_data_source.db_data_source import DbDataSource
+from esg_matching.exceptions import exceptions_data_source
+from esg_matching.exceptions import exceptions_matching_policy
 
 
 def _add_alias_to_list(all_aliases: list, rules_dict: dict):

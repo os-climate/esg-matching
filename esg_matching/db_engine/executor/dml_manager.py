@@ -4,7 +4,7 @@
 import sqlalchemy as sa
 
 # Import internal modules
-from esgmatching.db_engine.engines.connector import DbConnector
+from esg_matching.db_engine.engines.connector import DbConnector
 
 
 class DmlManager:

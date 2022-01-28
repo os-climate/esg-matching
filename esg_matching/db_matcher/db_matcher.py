@@ -4,17 +4,17 @@
 from abc import ABC, abstractmethod
 
 # Database connection and sql stamente executor
-from esgmatching.db_engine.engines.connector import DbConnector
-from esgmatching.db_engine.executor.dml_manager import DmlManager
+from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.db_engine.executor.dml_manager import DmlManager
 
 # Matching policy
-from esgmatching.db_matcher.matching_policy import MatchingPolicy
+from esg_matching.db_matcher.matching_policy import MatchingPolicy
 
 # Builders
-from esgmatching.db_engine.builders.column_builder import ColumnBuilder
-from esgmatching.db_engine.builders.select_builder import SelectBuilder
-from esgmatching.db_engine.builders.delete_builder import DeleteBuilder
-from esgmatching.db_engine.builders.sql_condition_builder import SqlConditionBuilder
+from esg_matching.db_engine.builders.column_builder import ColumnBuilder
+from esg_matching.db_engine.builders.select_builder import SelectBuilder
+from esg_matching.db_engine.builders.delete_builder import DeleteBuilder
+from esg_matching.db_engine.builders.sql_condition_builder import SqlConditionBuilder
 
 
 class DbMatcher(ABC):

@@ -1,7 +1,7 @@
 """ Base class allows to create an object that reflects the content of a json used for settings """
 
-from esgmatching.exceptions import exceptions_settings
-from esgmatching.file_reader import file_utils
+from esg_matching.exceptions import exceptions_settings
+from esg_matching.file_reader import file_utils
 
 
 class JsonSettings:

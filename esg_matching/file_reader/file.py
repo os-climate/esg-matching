@@ -1,8 +1,8 @@
 """ Base class allows to create an object to represent a data file and/or its settings """
 
-from esgmatching.file_reader.file_settings import JsonSettings
-from esgmatching.file_reader import file_utils
-from esgmatching.exceptions import exceptions_file
+from esg_matching.file_reader.file_settings import JsonSettings
+from esg_matching.file_reader import file_utils
+from esg_matching.exceptions import exceptions_file
 
 
 class File:

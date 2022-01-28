@@ -2,9 +2,9 @@
 
 import pandas as pd
 
-from esgmatching.db_data_source.db_data_source import DbDataSource
-from esgmatching.db_engine.engines.connector import DbConnector
-from esgmatching.exceptions import exceptions_data_source
+from esg_matching.db_data_source.db_data_source import DbDataSource
+from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.exceptions import exceptions_data_source
 
 
 class DbMatchDataSource(DbDataSource):

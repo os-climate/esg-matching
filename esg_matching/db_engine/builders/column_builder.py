@@ -4,8 +4,8 @@
 import sqlalchemy as sa
 
 # Import internal modules
-from esgmatching.db_engine.engines.connector import DbConnector
-from esgmatching.exceptions import exceptions_db_engine, exceptions_builders
+from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.exceptions import exceptions_db_engine, exceptions_builders
 
 
 class ColumnBuilder:

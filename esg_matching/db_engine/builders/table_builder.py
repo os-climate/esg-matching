@@ -5,9 +5,9 @@ import pandas
 from sqlalchemy import MetaData, Table
 
 # Import internal modules
-from esgmatching.exceptions import exceptions_db_engine, exceptions_builders
-from esgmatching.db_engine.engines.connector import DbConnector
-from esgmatching.db_engine.builders.column_builder import ColumnBuilder
+from esg_matching.exceptions import exceptions_db_engine, exceptions_builders
+from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.db_engine.builders.column_builder import ColumnBuilder
 
 
 class TableBuilder:

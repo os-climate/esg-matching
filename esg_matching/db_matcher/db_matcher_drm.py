@@ -1,9 +1,9 @@
 """ Base class allows to create a matcher that performs direct residual matching on a database """
 
-from esgmatching.db_matcher.db_matcher import DbMatcher
-from esgmatching.db_engine.engines.connector import DbConnector
-from esgmatching.db_matcher.matching_policy import MatchingPolicy
-from esgmatching.exceptions import exceptions_matching_policy
+from esg_matching.db_matcher.db_matcher import DbMatcher
+from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.db_matcher.matching_policy import MatchingPolicy
+from esg_matching.exceptions import exceptions_matching_policy
 
 
 class DbMatcherDrm(DbMatcher):
