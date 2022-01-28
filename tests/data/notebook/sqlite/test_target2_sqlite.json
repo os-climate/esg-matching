@@ -1,28 +1,30 @@
 {
   "file_processing": {
-    "file_path": "../../../tests/data/test_target1.csv",
+    "file_path": "../../../../tests/data/test_target2.csv",
     "file_extension_pattern": "*.csv",
-    "filename_pattern": "test_target1",
+    "filename_pattern": "test_target2",
     "encoding": "utf-8",
     "separator": ","
   },
   "data_source": {
-    "name": "DS_TGT1",
-    "table_name": "ESG_MATCH_TGT1",
+    "name": "DS_TGT2",
+    "table_name": "ESG_MATCH_TGT2",
     "create_table": "True",
     "if_table_exists": "drop",
     "primary_keys": ["UNIQUE_ID"],
     "attributes": {
-      "UNIQUE_ID":  ["UNIQUE_ID","NUMBER"],
-      "ISIN":  ["ISIN", "VARCHAR2", "12"],
-      "LEI":  ["LEI", "VARCHAR2", "20"],
-      "NAME":  ["COMPANY", "VARCHAR2", "255"],
-      "COUNTRY_CODE": ["COUNTRY", "VARCHAR2", "255"]
+      "UNIQUE_ID":  ["UNIQUE_ID","int"],
+      "ISIN":  ["ISIN", "str"],
+      "LEI":  ["LEI", "str"],
+      "SEDOL":  ["SEDOL", "str"],
+      "COMPANY_NAME":  ["COMPANY", "str"],
+      "COUNTRY": ["COUNTRY", "str"]
     },
     "matching_role": "target",
     "matching_alias": {
       "ISIN":  "ISIN",
       "LEI":  "LEI",
+      "SEDOL":  "SEDOL",
       "COMPANY": "COMPANY",
       "COUNTRY": "COUNTRY"
     },
@@ -30,6 +32,7 @@
       "TGT_ID":  "UNIQUE_ID",
       "ISIN":  "ISIN",
       "LEI":  "LEI",
+      "SEDOL":  "SEDOL",
       "TGT_COMPANY": "COMPANY",
       "TGT_COUNTRY": "COUNTRY"
     }
@@ -45,6 +48,7 @@
       "ifm": {
         "isin":  ["ISIN"],
         "lei":  ["LEI"],
+        "sedol":  ["SEDOL"],
         "name+country":  ["COMPANY", "COUNTRY"]
       }
     }

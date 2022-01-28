@@ -1,6 +1,6 @@
 {
   "file_processing": {
-    "file_path": "../../../tests/data/test_referential1.csv",
+    "file_path": "../../../../tests/data/test_referential1.csv",
     "file_extension_pattern": "*.csv",
     "filename_pattern": "test_referential1",
     "encoding": "utf-8",
@@ -13,10 +13,10 @@
     "if_table_exists": "drop",
     "primary_keys": ["UNIQUE_ID"],
     "attributes": {
-      "UNIQUE_ID":  ["UNIQUE_ID","NUMBER"],
-      "ISIN":  ["ISIN", "VARCHAR2", "12"],
-      "COMPANY":  ["COMPANY", "VARCHAR2", "255"],
-      "COUNTRY": ["COUNTRY", "VARCHAR2", "255"]
+      "UNIQUE_ID":  ["UNIQUE_ID","int"],
+      "ISIN":  ["ISIN", "str"],
+      "COMPANY":  ["COMPANY", "str"],
+      "COUNTRY": ["COUNTRY", "str"]
     },
     "matching_role": "referential",
     "matching_alias": {
@@ -31,4 +31,3 @@
     }
   }
 }
-
