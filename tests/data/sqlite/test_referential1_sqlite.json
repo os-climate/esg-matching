@@ -1,0 +1,33 @@
+{
+  "file_processing": {
+    "file_path": "./data/test_referential1.csv",
+    "file_extension_pattern": "*.csv",
+    "filename_pattern": "test_referential1",
+    "encoding": "utf-8",
+    "separator": ","
+  },
+  "data_source": {
+    "name": "DS_REF",
+    "table_name": "ESG_MATCH_REF",
+    "create_table": "True",
+    "if_table_exists": "drop",
+    "primary_keys": ["UNIQUE_ID"],
+    "attributes": {
+      "UNIQUE_ID":  ["UNIQUE_ID","int"],
+      "ISIN":  ["ISIN", "str"],
+      "COMPANY":  ["COMPANY", "str"],
+      "COUNTRY": ["COUNTRY", "str"]
+    },
+    "matching_role": "referential",
+    "matching_alias": {
+      "ISIN":  "ISIN",
+      "COMPANY": "COMPANY",
+      "COUNTRY": "COUNTRY"
+    },
+    "map_to_matching": {
+      "REF_ID":  "UNIQUE_ID",
+      "REF_COMPANY":  "COMPANY",
+      "REF_COUNTRY":  "COUNTRY"
+    }
+  }
+}
