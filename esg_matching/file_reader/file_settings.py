@@ -6,33 +6,48 @@ from esg_matching.file_reader import file_utils
 
 class JsonSettings:
     """
-        This base class provides the infrastructure needed to reflect the content of a json file used
-            to describe datasources and its matching policies.
+        This base class provides the infrastructure needed to reflect the content of a json file used to describe
+        datasources and its matching policies.
 
-        Attributes: (see DbMatcher)
-            file_path (str): filename and path or just path from json settings
-            file_extension_pattern (str): an extension patter, such as *.csv to filter files by type in a folder
-            filename_pattern (str): filename pattern from json settings (used when file_path is a directory and
-                the system has to capture the most recent file that follows the filename pattern.
-            file_encoding (str): file encoding from json settings
-            file_separator (str): file separator from json settings
-            datasource_name (str): name of the datasource
-            datasource_table_name (str): name of the equivalent database table
-            datasource_create_table (bool): indicates if the table needs to be created (True or False)
-            datasource_if_table_exists (str): indicates what to do if the tables exists (drop or clean)
-            datasource_primary_keys (list): list with the names of the primary keys
-            datasource_attributes  (dict): dictionary with the attribute names. The dict keys are the names of the
-                attributes in the file header. The dict items are the names of the attributes in the equivalente
-                database table.
-            matching_role (str): indicates the role of the datasource in a matching process (target or referential)
-            matching_alias (dict): dictionary with alias to some of the datasource attributes. The dict keys are the
-                alias names, while the items are the names of the attributes in the equivalente database table.
-            map_to_matching (dict): dictionary that maps some datasource attributes to attributes in the matching
-                table. The dict keys are are the attribute names in the matching table, while the items are the
-                attribute names in the database table for the datasource.
-            map_indirect_matching (dict): dictionary with the association between target and referential columns that
-                need to be switched when performing the indirect matching.
-            matching_policy (dict): dictionary that describe the matching policies.
+        Attributes:
+            file_path (str)
+                Filename and path or just path from json settings
+            file_extension_pattern (str)
+                An extension patter, such as *.csv to filter files by type in a folder.
+            filename_pattern (str)
+                Filename pattern from json settings (used when file_path is a directory and the system has to capture
+                the most recent file that follows the filename pattern.
+            file_encoding (str)
+                File encoding from json settings.
+            file_separator (str)
+                File separator from json settings.
+            datasource_name (str)
+                Name of the datasource.
+            datasource_table_name (str)
+                Name of the equivalent database table.
+            datasource_create_table (bool)
+                Indicates if the table needs to be created (True or False).
+            datasource_if_table_exists (str)
+                Indicates what to do if the tables exists (drop or clean)
+            datasource_primary_keys (list)
+                List with the names of the primary keys.
+            datasource_attributes  (dict)
+                Dictionary with the attribute names. The dict keys are the names of the attributes in the file header.
+                The dict items are the names of the attributes in the equivalente database table.
+            matching_role (str)
+                Indicates the role of the datasource in a matching process (target or referential).
+            matching_alias (dict):
+                Dictionary with alias to some of the datasource attributes. The dict keys are the alias names, while
+                the items are the names of the attributes in the equivalente database table.
+            map_to_matching (dict)
+                Dictionary that maps some datasource attributes to attributes in the matching table. The dict keys are
+                the attribute names in the matching table, while the items are the attribute names in the database
+                table for the datasource.
+            map_indirect_matching (dict)
+                Dictionary with the association between target and referential columns that need to be switched when
+                performing the indirect matching.
+            matching_policy (dict)
+                Dictionary that describe the matching policies.
     """
 
     def __init__(self, json_settings):
@@ -81,14 +96,11 @@ class JsonSettings:
                 correspondent object variables.
 
             Parameters:
-                settings_json (dict) : the dictionary read from a json file
+                settings_json (dict)
+                    The dictionary read from a json file.
 
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
+
         # Read the [file_processing] section of the json file
         if 'file_processing' in settings_json:
             sub_dict = settings_json['file_processing']
@@ -109,19 +121,24 @@ class JsonSettings:
                 correspondent object variables.
 
             Parameters:
-                settings_json (dict) : the dictionary read from a json file
-
-            Returns:
-                No return value.
+                settings_json (dict)
+                    The dictionary read from a json file.
 
             Raises:
-                exceptions_settings.DataSourceSettingsNotDefined when datasource settings is not defined in json
-                exceptions_settings.IfTableExistsNotRecognized when wrong values are defined in json
-                exceptions_settings.MatchingRoleNotRecognized when wrong values are defined in json
-                exceptions_settings.AliasMatchingNotDefined when aliases are not defined
-                exceptions_settings.FieldsMappingToMatchingTableNotDefined when attribute mapping is not defined
-                exceptions_settings.FieldsMappingToNoMatchingTableNotDefined when attribute mapping is not defined
+                exceptions_settings.DataSourceSettingsNotDefined
+                    When datasource settings is not defined in json.
+                exceptions_settings.IfTableExistsNotRecognized
+                    When wrong values are defined in json.
+                exceptions_settings.MatchingRoleNotRecognized
+                    When wrong values are defined in json.
+                exceptions_settings.AliasMatchingNotDefined
+                    When aliases are not defined.
+                exceptions_settings.FieldsMappingToMatchingTableNotDefined
+                    When attribute mapping is not defined.
+                exceptions_settings.FieldsMappingToNoMatchingTableNotDefined
+                    When attribute mapping is not defined.
         """
+
         # Read the [data_source] section of the json file
         if 'data_source' in settings_json:
             sub_dict = settings_json['data_source']
@@ -178,20 +195,26 @@ class JsonSettings:
                 correspondent object variable.
 
             Parameters:
-                settings_json (dict) : the dictionary read from a json file
-
-            Returns:
-                No return value.
+                settings_json (dict)
+                    The dictionary read from a json file.
 
             Raises:
-                exceptions_settings.MatchingPolicyEmpty when matching policy is empty
-                exceptions_settings.ReferentialIsMissingInMatchingPolicy when matching policy is incorrect
-                exceptions_settings.MatchingSourceIsMissingInMatchingPolicy when matching policy is incorrect
-                exceptions_settings.NoMatchingSourceIsMissingInMatchingPolicy when matching policy is incorrect
-                exceptions_settings.DfmRulesEmptyInMatchingPolicy when matching policy is incorrect
-                exceptions_settings.DrmRulesEmptyInMatchingPolicy when matching policy is incorrect
-                exceptions_settings.IfmRulesEmptyInMatchingPolicy when matching policy is incorrect
+                exceptions_settings.MatchingPolicyEmpty
+                    When matching policy is empty.
+                exceptions_settings.ReferentialIsMissingInMatchingPolicy
+                    When matching policy is incorrect.
+                exceptions_settings.MatchingSourceIsMissingInMatchingPolicy
+                    When matching policy is incorrect.
+                exceptions_settings.NoMatchingSourceIsMissingInMatchingPolicy
+                    When matching policy is incorrect.
+                exceptions_settings.DfmRulesEmptyInMatchingPolicy
+                    When matching policy is incorrect.
+                exceptions_settings.DrmRulesEmptyInMatchingPolicy
+                    When matching policy is incorrect.
+                exceptions_settings.IfmRulesEmptyInMatchingPolicy
+                    When matching policy is incorrect.
         """
+
         # Read the [file_processing] section of the json file
         if 'matching_policy' in settings_json:
             sub_dict = settings_json['matching_policy']

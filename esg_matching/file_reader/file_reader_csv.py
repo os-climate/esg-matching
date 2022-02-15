@@ -14,22 +14,15 @@ class FileReaderCsv(FileReader):
         This base class provides the infrastructure needed to create a file reader
 
         Attributes:
-            _separator (str): separator of attributes in a csv file
+            _separator (str)
+                Separator of attributes in a csv file
     """
 
     def __init__(self):
         """
             Constructor method.
-
-            Parameters:
-                No parameter required.
-
-            Returns:
-                FileReaderCsv (object)
-
-            Raises:
-                No exception is raised.
         """
+
         super().__init__()
         self._separator = ','
         self._extension_supported = '.csv'
@@ -39,13 +32,13 @@ class FileReaderCsv(FileReader):
             Private class method that checks if a list of names exist as attributes
 
             Parameters:
-                attribute_names (list): list of attribute names
+                attribute_names (list)
+                    List of attribute names.
 
             Returns:
-                (bool) True if all the names are attributes or False, otherwise.
+                (bool)
+                    True if all the names are attributes or False, otherwise.
 
-            Raises:
-                No exception is raised.
         """
 
         for item in self._attributes_to_read:
@@ -61,10 +54,9 @@ class FileReaderCsv(FileReader):
                 No parameter required.
 
             Returns:
-                file_record (NamedTuple): a structure that represents a row of a csv file with all its attributes
+                file_record (NamedTuple)
+                    A structure that represents a row of a csv file with all its attributes.
 
-            Raises:
-                No exception is raised.
         """
 
         attributes_row = []
@@ -78,13 +70,16 @@ class FileReaderCsv(FileReader):
             Class method that reads only the header of a csv file.
 
             Parameters:
-                file_path (str): folder and name of the csv file to read.
+                file_path (str)
+                    Folder and name of the csv file to read.
 
             Returns:
-                csv_column_names (list): a list with the attribute names in the file header
+                csv_column_names (list)
+                    A list with the attribute names in the file header.
 
             Raises:
-                exceptions_file.NoHeaderInFile when the file does not have a header
+                exceptions_file.NoHeaderInFile
+                    When the file does not have a header.
         """
 
         # Open and read the csv file
@@ -104,15 +99,17 @@ class FileReaderCsv(FileReader):
             Class method that reads the content of a csv file.
 
             Parameters:
-                file_path (str): folder and name of the csv file to read.
+                file_path (str)
+                    Folder and name of the csv file to read.
 
             Returns:
                 Return line by line of the file in the format of a NamedTuple (see _create_row_object method)
 
             Raises:
-                exceptions_file.NoHeaderInFile when file does not have a header
-                exceptions_file.ColumnsToReadDifferFromFileHeader when the columns in the file differ from the columns
-                    expected to be read (columns described in the file settings)
+                exceptions_file.NoHeaderInFile
+                    When file does not have a header
+                exceptions_file.ColumnsToReadDifferFromFileHeader
+                    When the columns in the file differ from the columns expected to be read.
         """
 
         # Open and read the csv file

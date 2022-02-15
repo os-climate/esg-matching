@@ -303,6 +303,7 @@ class EtlProcessing:
             Raises:
                 exceptions_file.FileTypeNotSupported when the file type is not supported
         """
+
         # Set the file object
         self._file = file
 
@@ -315,15 +316,8 @@ class EtlProcessing:
         """
             Class method that prints out information about the result of the ETL process.
 
-            Parameters:
-                No parameter required.
-
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
+
         # Create the report object to keep information about the reading process
         report_name = ' ETL Processing Report '
         report_desc = 'Details of the ETL process performed on [' + self._data_source.name + '] data source.'

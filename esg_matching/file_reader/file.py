@@ -1,4 +1,4 @@
-""" Base class allows to create an object to represent a data file and/or its settings """
+""" Base class allows to create an object to represent a file accompanied with its matching settings. """
 
 from esg_matching.file_reader.file_settings import JsonSettings
 from esg_matching.file_reader import file_utils
@@ -10,10 +10,14 @@ class File:
         This base class provides the infrastructure needed to represent a data file and/or its settings
 
         Attributes:
-            _filename (str): the complete path and name of a data file
-            _file_extension (str): file extension (e.g. .csv)
-            _filename_settings (str): path and name of the json file used as settings of a data file.
-            _obj_settings (JsonSettings): settings object that translates the properties of a json file
+            _filename (str)
+                The complete file path and name.
+            _file_extension (str)
+                File extension (e.g. .csv)
+            _filename_settings (str)
+                Path and name of the json file used as the matching settings.
+            _obj_settings (esg_matching.file_reader.file_settings.JsonSettings)
+                Settings object that translates the properties of a json file into matching parameters and policies.
     """
 
     def __init__(self, filename_settings):
@@ -30,31 +34,29 @@ class File:
 
     @property
     def filename(self):
+        """ The complete file path and name. """
         return self._filename
 
     @property
     def extension(self):
+        """ File extension (e.g. .csv). """
         return self._file_extension
 
     @property
     def filename_settings(self):
+        """ Path and name of the json file used as the matching settings. """
         return self._filename_settings
 
     @property
     def settings(self):
+        """ Settings object that translates the properties of a json file into matching parameters and policies. """
         return self._obj_settings
 
     def _get_file_info(self):
         """
-        Retrieves the complete path, name and extension of the file described in the json settings.
-
-        Parameters:
-            No parameters required.
-        Returns:
-            No return value.
-        Raises:
-            No exception is raised.
+        Private method to retrieve the complete path, name and extension of the file described in the json settings.
         """
+
         if file_utils.is_file(self._obj_settings.file_path):
             self._filename = self._obj_settings.file_path
             self._file_extension = file_utils.get_extension(self._filename)
