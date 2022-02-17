@@ -1,10 +1,10 @@
-""" Base class to create database columns object according to the dialect of a given database engines """
+""" Base class to create database columns object according to the dialect of a given database connectors """
 
 # Import third-party libraries
 import sqlalchemy as sa
 
 # Import internal modules
-from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 from esg_matching.exceptions import exceptions_db_engine, exceptions_builders
 
 
@@ -18,7 +18,7 @@ class ColumnBuilder:
             db_col3 = my_column_builder.create_column('auto_timestamp').is_auto_timestamp(True).build()
 
         Attributes:
-            _db_connector (DbConnector): a database engines
+            _db_connector (DbConnector): a database connectors
             _column_name (str): the column name to be created
             _column_db_type (str): the column type to be created
             _column_is_pk (bool): indicates if the column to be created is a primary key column
@@ -31,15 +31,15 @@ class ColumnBuilder:
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): a database engines used to create columns according to its dialect
+                db_connector (DbConnector): a database connectors used to create columns according to its dialect
 
             Returns:
                 ColumnBuilder (object)
 
             Raises:
-                ConnectionNotDefined: when the engines object is None or there is no database connection active
+                ConnectionNotDefined: when the connectors object is None or there is no database connection active
         """
-        # Check if the database engines is defined
+        # Check if the database connectors is defined
         if db_connector is None:
             raise exceptions_db_engine.ConnectionNotDefined
 
@@ -83,7 +83,7 @@ class ColumnBuilder:
                 label_name (str): a label for the column
 
             Returns:
-                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the engines
+                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the connectors
 
             Raises:
                 No exception is raised.
@@ -185,13 +185,13 @@ class ColumnBuilder:
 
     def build(self):
         """
-            Creates the column according to the database dialect of the engines object.
+            Creates the column according to the database dialect of the connectors object.
 
             Parameters:
                 No parameters required.
 
             Returns:
-                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the engines
+                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the connectors
 
             Raises:
                 No exception is raised.
@@ -208,19 +208,19 @@ class ColumnBuilder:
 
     def _create_column(self):
         """
-            Private method that creates a database column object with the type and size supported by the engines.
+            Private method that creates a database column object with the type and size supported by the connectors.
 
             Parameters:
                 No parameters required.
 
             Returns:
-                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the engines.
+                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the connectors.
 
             Raises:
                 No exception is raised.
         """
         # If the column type was not specified, then call the set_type() method to create a default database type
-        # related to the current engines
+        # related to the current connectors
         if self._column_db_type is None:
             self.set_type('str')
         column_object = sa.Column(self._column_name, self._column_db_type, primary_key=self._column_is_pk)
@@ -228,13 +228,13 @@ class ColumnBuilder:
 
     def _create_auto_pk_column(self):
         """
-            Private method that creates a database column object according to the dialect of the current engines.
+            Private method that creates a database column object according to the dialect of the current connectors.
 
             Parameters:
                 No parameters.
 
             Returns:
-                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the engines.
+                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the connectors.
 
             Raises:
                 No exception is raised.
@@ -244,13 +244,13 @@ class ColumnBuilder:
 
     def _create_auto_timestamp_column(self):
         """
-            Private method that creates a database column object according to the dialect of by the engines.
+            Private method that creates a database column object according to the dialect of by the connectors.
 
             Parameters:
                 No parameters.
 
             Returns:
-                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the engines.
+                column_object (sqlalchemy.sql.schema.Column): a database column object supported by the connectors.
 
             Raises:
                 No exception is raised.

@@ -1,13 +1,13 @@
 """ Base class allows to create an ETL process object"""
 
 from esg_matching.file_reader.file import File
-from esg_matching.file_reader.file_reader_csv import FileReader
+from esg_matching.file_reader.csv_reader import FileReader
 from esg_matching.exceptions import exceptions_file
 
-from esg_matching.db_engine.engines.connector import DbConnector
-from esg_matching.db_data_source.db_data_source import DbDataSource
-from esg_matching.db_data_source.db_match_data_source import DbMatchDataSource
-from esg_matching.db_engine.builders.column_builder import ColumnBuilder
+from esg_matching.engine.connectors.base_connector import DbConnector
+from esg_matching.data_source.db_source import DbDataSource
+from esg_matching.data_source.db_match import DbMatchDataSource
+from esg_matching.engine.builders.column_builder import ColumnBuilder
 
 from esg_matching.report.report_manager import ReportManager
 
@@ -32,7 +32,7 @@ class EtlProcessing:
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): database engines
+                db_connector (DbConnector): database connectors
 
             Returns:
                 EtlProcessing (object)

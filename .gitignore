@@ -4,6 +4,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+venv/
 env/
 build/
 develop-eggs/
@@ -41,7 +42,9 @@ coverage.xml
 *,cover
 
 # Sphinx documentation
-docs/_build/
+docs/build/
+make.bat
+Makefile
 
 # PyBuilder
 target/
@@ -51,3 +54,6 @@ target/
 
 # Pycharm
 .idea
+
+# Jupyter Notebook
+.ipynb_checkpoints

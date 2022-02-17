@@ -1,17 +1,17 @@
 from unittest import TestCase, TestSuite, TextTestRunner
 
 # Import the module for connection to a sqllite database
-from esg_matching.db_engine.engines.connector_sql_lite import SqlLiteConnector
+from esg_matching.engine.connectors.sql_lite import SqlLiteConnector
 
 # Import the modules for file management
 from esg_matching.file_reader.file import File
-from esg_matching.file_reader.file_reader_csv import FileReaderCsv
+from esg_matching.file_reader.csv_reader import FileReaderCsv
 
 # Import the modules for the etl processing: reading, transformation and loading data to a database
-from esg_matching.processing.etl_processing import EtlProcessing
+from esg_matching.processing.etl import EtlProcessing
 
 # Import query manager
-from esg_matching.db_engine.executor.dql_manager import DqlManager
+from esg_matching.engine.executor.dql_manager import DqlManager
 
 
 # Localization of the database to be created during the test

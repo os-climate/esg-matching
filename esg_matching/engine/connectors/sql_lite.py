@@ -1,7 +1,7 @@
 """ Base class to connect to a SQLLite database """
 
 # Import internal modules
-from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 
 
 class SqlLiteConnector(DbConnector):

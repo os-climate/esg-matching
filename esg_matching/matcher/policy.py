@@ -1,7 +1,7 @@
 """ Base class allows to create policies (rules) to perform matchings on database """
 
 # Import internal modules
-from esg_matching.db_data_source.db_data_source import DbDataSource
+from esg_matching.data_source.db_source import DbDataSource
 from esg_matching.exceptions import exceptions_data_source
 from esg_matching.exceptions import exceptions_matching_policy
 

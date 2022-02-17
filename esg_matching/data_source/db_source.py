@@ -2,11 +2,11 @@
 
 import pandas as pd
 
-from esg_matching.db_engine.engines.connector import DbConnector
-from esg_matching.db_engine.executor.dql_manager import DqlManager
-from esg_matching.db_engine.executor.dml_manager import DmlManager
-from esg_matching.db_engine.builders.table_builder import TableBuilder
-from esg_matching.db_engine.builders.column_builder import ColumnBuilder
+from esg_matching.engine.connectors.base_connector import DbConnector
+from esg_matching.engine.executor.dql_manager import DqlManager
+from esg_matching.engine.executor.dml_manager import DmlManager
+from esg_matching.engine.builders.table_builder import TableBuilder
+from esg_matching.engine.builders.column_builder import ColumnBuilder
 from esg_matching.exceptions import exceptions_data_source
 
 
@@ -38,7 +38,7 @@ class DbDataSource:
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): database engines
+                db_connector (DbConnector): database connectors
 
             Returns:
                 DbDataSource (object)

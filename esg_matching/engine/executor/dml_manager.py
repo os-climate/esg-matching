@@ -4,7 +4,7 @@
 import sqlalchemy as sa
 
 # Import internal modules
-from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 
 
 class DmlManager:
@@ -12,7 +12,7 @@ class DmlManager:
         This class provides a base structure to execute DML commands, such as: insert, update and delete.
 
         Attributes:
-            _db_connector (DbConnector): database engines
+            _db_connector (DbConnector): database connectors
     """
 
     def __init__(self, db_connector: DbConnector):
@@ -20,7 +20,7 @@ class DmlManager:
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): database engines
+                db_connector (DbConnector): database connectors
 
             Returns:
                 DmlManager (object)

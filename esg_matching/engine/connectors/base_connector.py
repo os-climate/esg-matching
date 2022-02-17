@@ -84,7 +84,7 @@ class DbConnector(ABC):
     @abstractmethod
     def _is_ready_to_connect(self):
         """
-            This method is provided by the subclasses to indicate if the engines has all the information required
+            This method is provided by the subclasses to indicate if the connectors has all the information required
             to perform the connection to a database. This method is called by the connect() method before the a
             connection is stablished. Depending on the type of database in use, it is required to perform several
             checkings regarding the connection parameters, for intance: user_name, password, host url, etc...
@@ -186,7 +186,7 @@ class DbConnector(ABC):
                 No return values.
 
             Raises:
-                SessionAlreadyExists: if a session already exists for the engines.
+                SessionAlreadyExists: if a session already exists for the connectors.
                 SessionTypeNotSupported: when session_type parameter is different from 'normal' or 'scoped'
         """
 
@@ -280,7 +280,7 @@ class DbConnector(ABC):
     def get_column_type(self, str_type: str = 'str', size: int = 0):
         """
             Class method that returns the equivalent database column's datatype object, given a string that
-            defines that datatype and it is recognized by this engines or its subclasses.
+            defines that datatype and it is recognized by this connectors or its subclasses.
 
             Parameters:
                 str_type (str): a string that defines a datatype
@@ -311,7 +311,7 @@ class DbConnector(ABC):
 
     def get_auto_pk_column(self, column_name):
         """
-            Class method that creates an autoincrement primary key database column accoding to the engines dialect.
+            Class method that creates an autoincrement primary key database column accoding to the connectors dialect.
             This method might be overridden by subclasses because databases usually have differents ways to create
              automatic primary keys columns.
 
@@ -329,7 +329,7 @@ class DbConnector(ABC):
 
     def get_auto_timestamp_column(self, column_name):
         """
-            Class method that creates an automatic timestamp column accoding to the engines dialect.
+            Class method that creates an automatic timestamp column accoding to the connectors dialect.
             This method might be overridden by subclasses because databases usually have differents ways to create
              automatic timestamp columns.
 

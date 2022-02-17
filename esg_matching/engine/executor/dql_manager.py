@@ -6,7 +6,7 @@ import sqlalchemy as sa
 import sqlalchemy.sql as sql
 
 # Import internal modules
-from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 
 
 class DqlManager:
@@ -14,7 +14,7 @@ class DqlManager:
         This class provides a base structure to execute DQL commands, such as SELECT
 
         Attributes:
-            _db_connector (DbConnector): database engines
+            _db_connector (DbConnector): database connectors
     """
 
     def __init__(self, db_connector: DbConnector):
@@ -22,7 +22,7 @@ class DqlManager:
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): database engines
+                db_connector (DbConnector): database connectors
 
             Returns:
                 DqlManager (object)

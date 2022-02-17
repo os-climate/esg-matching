@@ -1,4 +1,4 @@
-""" Base class to create database tables given a database engines """
+""" Base class to create database tables given a database connectors """
 
 # Import third-party libraries
 import pandas
@@ -6,8 +6,8 @@ from sqlalchemy import MetaData, Table
 
 # Import internal modules
 from esg_matching.exceptions import exceptions_db_engine, exceptions_builders
-from esg_matching.db_engine.engines.connector import DbConnector
-from esg_matching.db_engine.builders.column_builder import ColumnBuilder
+from esg_matching.engine.connectors.base_connector import DbConnector
+from esg_matching.engine.builders.column_builder import ColumnBuilder
 
 
 class TableBuilder:
@@ -36,15 +36,15 @@ class TableBuilder:
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): a database engines used to create columns according to its dialect
+                db_connector (DbConnector): a database connectors used to create columns according to its dialect
 
             Returns:
                 TableBuilder (object)
 
             Raises:
-                ConnectionNotDefined: when the engines object is None or there is no database connection active
+                ConnectionNotDefined: when the connectors object is None or there is no database connection active
         """
-        # Check if the database engines is defined
+        # Check if the database connectors is defined
         if db_connector is None:
             raise exceptions_db_engine.ConnectionNotDefined
 

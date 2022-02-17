@@ -4,17 +4,17 @@
 from abc import ABC, abstractmethod
 
 # Database connection and sql stamente executor
-from esg_matching.db_engine.engines.connector import DbConnector
-from esg_matching.db_engine.executor.dml_manager import DmlManager
+from esg_matching.engine.connectors.base_connector import DbConnector
+from esg_matching.engine.executor.dml_manager import DmlManager
 
 # Matching policy
-from esg_matching.db_matcher.matching_policy import MatchingPolicy
+from esg_matching.matcher.policy import MatchingPolicy
 
 # Builders
-from esg_matching.db_engine.builders.column_builder import ColumnBuilder
-from esg_matching.db_engine.builders.select_builder import SelectBuilder
-from esg_matching.db_engine.builders.delete_builder import DeleteBuilder
-from esg_matching.db_engine.builders.sql_condition_builder import SqlConditionBuilder
+from esg_matching.engine.builders.column_builder import ColumnBuilder
+from esg_matching.engine.builders.select_builder import SelectBuilder
+from esg_matching.engine.builders.delete_builder import DeleteBuilder
+from esg_matching.engine.builders.sql_condition_builder import SqlConditionBuilder
 
 
 class DbMatcher(ABC):
@@ -22,7 +22,7 @@ class DbMatcher(ABC):
         This class provides a base structure to perform direct and indirect matching on a database
 
         Attributes:
-            _db_connector (DbConnector): database engines
+            _db_connector (DbConnector): database connectors
             _matching_type (str): indicates the type of matching to be performed. It can be:
                 'direct_full_matching': (dfm) matching between a target datasource and a referential datasource
                                         by using join conditions as matching rules.
@@ -62,7 +62,7 @@ class DbMatcher(ABC):
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): database engines
+                db_connector (DbConnector): database connectors
 
             Returns:
                 DbMatcher (object)

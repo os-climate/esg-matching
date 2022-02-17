@@ -1,21 +1,27 @@
-""" Base class allows to create a file_reader object that reads data from a csv file"""
+"""
+    The **esg_matching.file_reader.csv_reader** module provides a concrete implementation of a file-reader object
+    for excel (.csv) files.
+"""
 
 # Import python libraries
 from csv import DictReader
 from typing import NamedTuple
 
 # Import internal libraries
-from esg_matching.file_reader.file_reader import FileReader
+from esg_matching.file_reader.base_reader import FileReader
 from esg_matching.exceptions import exceptions_file
 
 
 class FileReaderCsv(FileReader):
     """
-        This base class provides the infrastructure needed to create a file reader
+        Provides the infrastructure needed to create a file reader for csv files.
+        This class inherits from esg_matching.file_reader.base_reader.FileReader().
 
         Attributes:
             _separator (str)
                 Separator of attributes in a csv file
+            _extension_supported (str)
+                Extension supported by the reader, which is by default .csv.
     """
 
     def __init__(self):
@@ -29,11 +35,11 @@ class FileReaderCsv(FileReader):
 
     def _attributes_exist_in_file(self, attribute_names: list):
         """
-            Private class method that checks if a list of names exist as attributes
+            Private class method that checks if a list of names exist as attributes to be read from a file.
 
             Parameters:
                 attribute_names (list)
-                    List of attribute names.
+                    List of attribute names to check if exist as attributes to be read from a file.
 
             Returns:
                 (bool)
@@ -48,10 +54,7 @@ class FileReaderCsv(FileReader):
 
     def _create_row_object(self):
         """
-            Private class method that creates an object to represent a row of a csv file
-
-            Parameters:
-                No parameter required.
+            Private class method that creates an object to represent a row of a csv file.
 
             Returns:
                 file_record (NamedTuple)
@@ -71,7 +74,7 @@ class FileReaderCsv(FileReader):
 
             Parameters:
                 file_path (str)
-                    Folder and name of the csv file to read.
+                    Complete path and name of the csv file to read.
 
             Returns:
                 csv_column_names (list)
@@ -96,18 +99,18 @@ class FileReaderCsv(FileReader):
 
     def read_file(self, file_path):
         """
-            Class method that reads the content of a csv file.
+            Class method that reads the content of a csv file, line by line.
 
             Parameters:
                 file_path (str)
-                    Folder and name of the csv file to read.
+                    Complete path and name of the csv file to read.
 
-            Returns:
-                Return line by line of the file in the format of a NamedTuple (see _create_row_object method)
+            Yields:
+                Line by line of the file in the format of a NamedTuple (see _create_row_object() method)
 
             Raises:
                 exceptions_file.NoHeaderInFile
-                    When file does not have a header
+                    When file does not have a header.
                 exceptions_file.ColumnsToReadDifferFromFileHeader
                     When the columns in the file differ from the columns expected to be read.
         """

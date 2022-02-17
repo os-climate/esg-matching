@@ -6,7 +6,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import oracle
 
 # Import internal modules
-from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 from esg_matching.exceptions import exceptions_db_engine
 
 
@@ -210,7 +210,7 @@ class OracleConnector(DbConnector):
 
     def get_auto_timestamp_column(self, column_name):
         """
-            Class method that creates an automatic timestamp column accoding to the engines dialect.
+            Class method that creates an automatic timestamp column accoding to the connectors dialect.
             This method might be overridden by subclasses because databases usually have differents ways to create
              automatic timestamp columns.
 

@@ -1,22 +1,22 @@
-""" Base class allows to create a matcher that performs direct residual matching on a database """
+""" Base class allows to create a matcher that performs indirect matching on a database """
 
-from esg_matching.db_matcher.db_matcher import DbMatcher
-from esg_matching.db_engine.engines.connector import DbConnector
-from esg_matching.db_matcher.matching_policy import MatchingPolicy
+from esg_matching.matcher.db_matcher import DbMatcher
+from esg_matching.engine.connectors.base_connector import DbConnector
+from esg_matching.matcher.policy import MatchingPolicy
 from esg_matching.exceptions import exceptions_matching_policy
 
 
-class DbMatcherDrm(DbMatcher):
+class DbMatcherIfm(DbMatcher):
     """
         This base class provides the infrastructure needed to perform direct residual matching in a database.
 
         Attributes: (see DbMatcher)
-            _matching_type (str): indicates the type of matching to be performed. It can be:
-                'direct_residual_matching': (drm) performs matching between a referential datasource and the records
-                                        in the no-matching table. It is called 'residual' because it is performed
-                                        on the entries that were not matched after a dfm was executed. It  also
-                                        operates on join condition rules. But, this time the joins are between a
-                                        referential datasource and the no-matching entries.
+            'indirect_matching': (inm) performs a matching between a main target and other targets, but only on the
+                                    entries by which the other targets were previously and successfully matched to
+                                    a referential. In other words, the indirect matching applies the join condition
+                                    rules on the no-matching (residual records) and the matching table, so that
+                                    it's possible to capture positive matchings between a main target and other
+                                    targets that had already being matched with a referential.
     """
 
     def __init__(self, db_connector: DbConnector):
@@ -24,7 +24,7 @@ class DbMatcherDrm(DbMatcher):
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): database engines
+                db_connector (DbConnector): database connectors
 
             Returns:
                 DbMatcherDrm (object)
@@ -33,9 +33,9 @@ class DbMatcherDrm(DbMatcher):
                 No exception is raised.
         """
         super().__init__(db_connector)
-        self._matching_type = 'drm'
-        self._literal_matching_type = 'direct'
-        self._literal_matching_scope = 'residual'
+        self._matching_type = 'ifm'
+        self._literal_matching_type = 'indirect'
+        self._literal_matching_scope = 'full'
 
     def _can_matcher_be_used(self, policy: MatchingPolicy):
         """
@@ -54,7 +54,7 @@ class DbMatcherDrm(DbMatcher):
         """
         # Check if the policy contains rules to perform the direct residual matching
         if not policy.has_rule_type(self._matching_type):
-            raise exceptions_matching_policy.DirectResidualMatchingNotInPolicy
+            raise exceptions_matching_policy.IndirectMatchingNotInPolicy
 
     def _get_conditions(self, attribute_rules):
         """
@@ -79,7 +79,7 @@ class DbMatcherDrm(DbMatcher):
         for alias_attribute in attribute_rules:
             tgt_col_name = self._tgt_source.get_matching_attribute_by_alias(alias_attribute)
             left_db_col = self._no_matching_source.get_table_column(tgt_col_name)
-            right_db_col = self._ref_source.get_table_column_by_alias(alias_attribute)
+            right_db_col = self._matching_source.get_table_column(tgt_col_name)
             self._join_condition_builder = self._join_condition_builder.create_condition()\
                 .equal_cols(left_db_col, right_db_col)
             if join_condition is None:
@@ -87,12 +87,45 @@ class DbMatcherDrm(DbMatcher):
             else:
                 self._join_condition_builder = self._join_condition_builder.and_condition(join_condition)
                 join_condition = self._join_condition_builder.get_condition()
+
+        # Build where clause
+        # WHERE no-matching.datasource = 'datasource_name' ....
         tgt_name = self._tgt_source.name
-        tgt_db_name = self._no_matching_source.get_table_column('TGT_NAME')
+
+        no_match_tgt = self._no_matching_source.get_table_column('TGT_NAME')
         self._where_condition_builder = self._where_condition_builder.create_condition()
-        self._where_condition_builder = self._where_condition_builder.equal_value(tgt_db_name, tgt_name)
-        where_condition = self._where_condition_builder.get_condition()
+        self._where_condition_builder = self._where_condition_builder.equal_value(no_match_tgt, tgt_name)
+        first_condition = self._where_condition_builder.get_condition()
+
+        # ...AND matching.datasource != 'datasource_name'
+        match_tgt = self._matching_source.get_table_column('TGT_NAME')
+        self._where_condition_builder = self._where_condition_builder.create_condition()
+        self._where_condition_builder = self._where_condition_builder.not_equal_value(match_tgt, tgt_name)
+        where_condition = self._where_condition_builder.and_condition(first_condition).get_condition()
         return join_condition, where_condition
+
+    def _get_literal_cols_match(self, rule_name):
+        """
+            Private class method that builds the literal columns of the matching table. Literal columns are the ones
+                holding fixed values and defined in the matching datasource as standard attributes. See the
+                DbMatchDataSource object for more details on the pre-defined standard attributes.
+
+            Parameters:
+                rule_name (str) : the name of the matching rule is passed as parameter because it is itself a fixed
+                    value for one of the standard attribute 'MATCHING_RULE'.
+
+            Returns:
+                literal_db_cols (list): list of sqlalchemy.sql.schema.Column objects with fixed values.
+                literal_name_cols (list): list with the names of all literal columns created.
+
+            Raises:
+                No exception is raised.
+        """
+        literal_db_cols = []
+        literal_db_cols = self._add_literal_cols_type_match(rule_name, literal_db_cols)
+        literal_name_cols = ['MATCHING_TYPE', 'MATCHING_SCOPE', 'MATCHING_RULE']
+
+        return literal_db_cols, literal_name_cols
 
     def _get_cols_match(self, rule_name):
         """
@@ -115,12 +148,26 @@ class DbMatcherDrm(DbMatcher):
                 No exception is raised.
         """
         literal_db_cols, literal_name_cols = self._get_literal_cols_match(rule_name)
-        no_match_name_cols = self._tgt_source.get_name_cols_mapped_to_matching()
+        no_match_name_cols = self._no_matching_source.get_attribute_names(remove_auto_cols=True)
         no_match_db_cols = self._no_matching_source.get_db_cols_with_same_name(no_match_name_cols)
-        ref_db_cols = self._ref_source.get_db_cols_mapped_to_matching()
-        ref_name_cols = self._ref_source.get_name_cols_mapped_to_matching()
-        select_db_cols = literal_db_cols + no_match_db_cols + ref_db_cols
-        select_name_cols = literal_name_cols + no_match_name_cols + ref_name_cols
+
+        # Get the columns in the matching table that are not in no_match_name_cols list
+        all_col_names_in_matching = self._matching_source.get_attribute_names(remove_auto_cols=True)
+        dict_indirect_matching = self._matching_source.map_indirect_matching
+        match_name_cols = []
+        match_db_cols = []
+        for col_name in all_col_names_in_matching:
+            if col_name not in no_match_name_cols and col_name not in literal_name_cols:
+                if col_name in dict_indirect_matching:
+                    label_col = col_name
+                    col_name = dict_indirect_matching[label_col]
+                else:
+                    label_col = col_name
+                db_col = self._matching_source.get_table_column(col_name, label_col)
+                match_db_cols.append(db_col)
+                match_name_cols.append(label_col)
+        select_db_cols = literal_db_cols + no_match_db_cols + match_db_cols
+        select_name_cols = literal_name_cols + no_match_name_cols + match_name_cols
         return select_db_cols, select_name_cols
 
     def execute_matching(self):
@@ -154,7 +201,7 @@ class DbMatcherDrm(DbMatcher):
             # Build the select statement
             self._select_builder = self._select_builder.create_select(select_db_cols)
             self._select_builder = self._select_builder.from_table(self._no_matching_table)
-            self._select_builder = self._select_builder.join_table(self._ref_table).join_on(join_condition)
+            self._select_builder = self._select_builder.join_table(self._matching_table).join_on(join_condition)
             self._select_builder = self._select_builder.where_condition(where_condition)
             select_stm = self._select_builder.build_statement()
 
@@ -170,7 +217,7 @@ class DbMatcherDrm(DbMatcher):
             col_matching_id_name = self._no_matching_source.matching_id
             col_matching_id_db = self._no_matching_source.get_table_column(col_matching_id_name)
             self._select_builder = self._select_builder.create_select(col_matching_id_db)\
-                .from_table(self._no_matching_table).join_table(self._ref_table).join_on(join_condition)\
+                .from_table(self._no_matching_table).join_table(self._matching_table).join_on(join_condition)\
                 .where_condition(where_condition)
             select_stm = self._select_builder.build_statement()
             self._delete_builder = self._delete_builder.create_delete().from_table(self._no_matching_table)\

@@ -1,11 +1,15 @@
-""" Abstract class to represent a file-reader object """
+"""
+    The **esg_matching.file_reader.base_reader** module provides an abstract representation of a file-reader object.
+    The FileReader() class should be used to represent any type of input data source file.
+    For concrete representation of a specific data source file, check the esg_matching.file_reader.csv_reader module.
+"""
 
 from abc import ABC, abstractmethod
 
 
 class FileReader(ABC):
     """
-        This base class provides the infrastructure needed to create a file reader
+        Provides the infrastructure needed to create a non-typed file reader object.
 
         Attributes:
             _extension_supported (str)
@@ -19,16 +23,12 @@ class FileReader(ABC):
             _total_attributes_read (int)
                 Total of attributes read from the file.
             _attributes_to_read (list)
-                List of attribute names to read from the file.
+                List of attribute to read from the file.
     """
 
     def __init__(self):
         """
             Constructor method.
-
-            Returns:
-                FileReader (object)
-
         """
         self._extension_supported = ''
         self._encoding = 'utf-8'
@@ -70,11 +70,13 @@ class FileReader(ABC):
     @abstractmethod
     def read_file(self, file_path: str):
         """
-            Class abstract method that reads the content of a file.
+            Abstract method, implemented by the concrete class, to read the content of a file.
 
             Parameters:
                 file_path (str)
-                    Path and name of the file to read.
+                    Complete path and name of the file to read.
+            Yields:
+                Line by line of the file. See concrete implementations of this base class.
 
         """
         pass

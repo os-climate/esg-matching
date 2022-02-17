@@ -20,15 +20,15 @@ class ConnectionStringNotDefined(DbEngineError):
 
 
 class ConnectionNotDefined(DbEngineError):
-    """ There is no connection stablished with the database. Check the connect() method for your engines. """
+    """ There is no connection stablished with the database. Check the connect() method for your connectors. """
 
-    message = "There is no connection stablished with the database. Check the connect() method for your engines."
+    message = "There is no connection stablished with the database. Check the connect() method for your connectors."
 
 
 class SessionAlreadyExists(DbEngineError):
-    """ A session already exists for this engines. """
+    """ A session already exists for this connectors. """
 
-    message = "A session already exists for this engines."
+    message = "A session already exists for this connectors."
 
 
 class SessionTypeNotSupported(DbEngineError):

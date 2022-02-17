@@ -2,8 +2,8 @@
 
 import pandas as pd
 
-from esg_matching.db_data_source.db_data_source import DbDataSource
-from esg_matching.db_engine.engines.connector import DbConnector
+from esg_matching.data_source.db_source import DbDataSource
+from esg_matching.engine.connectors.base_connector import DbConnector
 from esg_matching.exceptions import exceptions_data_source
 
 
@@ -33,7 +33,7 @@ class DbMatchDataSource(DbDataSource):
             Constructor method.
 
             Parameters:
-                db_connector (DbConnector): database engines
+                db_connector (DbConnector): database connectors
 
             Returns:
                 DbMatchDataSource (object)

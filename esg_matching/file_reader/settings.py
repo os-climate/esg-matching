@@ -1,7 +1,11 @@
-""" Base class allows to create an object that reflects the content of a json used for settings """
+"""
+    The **esg_matching.file_reader.settings** module provides the object representation of a json file object
+    which contains important information about the file, its attributes and the rules for matching the content
+    of the file with other data sources.
+"""
 
 from esg_matching.exceptions import exceptions_settings
-from esg_matching.file_reader import file_utils
+from esg_matching.file_reader import utils
 
 
 class JsonSettings:
@@ -75,25 +79,24 @@ class JsonSettings:
         self.matching_policy = None
 
         # Check if the settings file exists
-        if file_utils.file_exists(json_settings):
+        if utils.file_exists(json_settings):
             self._filename_settings = json_settings
         else:
             raise exceptions_settings.FileSettingsDoesNotExist
 
         # Check if the settings file is a json file
-        if file_utils.get_extension(self._filename_settings) != '.json':
+        if utils.get_extension(self._filename_settings) != '.json':
             raise exceptions_settings.FileSettingsIsNotAJsonFile
 
         # Read settings from json file
-        dict_json = file_utils.read_json_file(self._filename_settings)
+        dict_json = utils.read_json_file(self._filename_settings)
         self._set_file_processing_settings(dict_json)
         self._set_data_source_settings(dict_json)
         self._set_matching_policy_settings(dict_json)
 
     def _set_file_processing_settings(self, settings_json: dict):
         """
-            Private class method used to load file processing settings from the json file to its
-                correspondent object variables.
+            Private class method used to update internal class attributes related to file processing.
 
             Parameters:
                 settings_json (dict)
@@ -117,8 +120,7 @@ class JsonSettings:
 
     def _set_data_source_settings(self, settings_json: dict):
         """
-            Private class method used to load data source settings from the json file to its
-                correspondent object variables.
+            Private class method used to update internal class attributes related to data source settings.
 
             Parameters:
                 settings_json (dict)
@@ -191,8 +193,7 @@ class JsonSettings:
 
     def _set_matching_policy_settings(self, settings_json: dict):
         """
-            Private class method used to load matching policy settings from the json file to its
-                correspondent object variable.
+            Private class method used to update internal class attributes related to matching policies.
 
             Parameters:
                 settings_json (dict)
