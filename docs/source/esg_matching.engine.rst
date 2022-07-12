@@ -1,20 +1,14 @@
-esg\_matching.engine package
+Engine
 ================================
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   esg_matching.engine.builders
-   esg_matching.engine.engines
-   esg_matching.engine.executor
-
-Module contents
----------------
+**Package path:** esg\_matching.engine
 
 .. automodule:: esg_matching.engine
-   :members:
-   :undoc-members:
-   :show-inheritance:
+
+.. toctree::
+   :maxdepth: 3
+
+   esg_matching.engine.builders
+   esg_matching.engine.connectors
+   esg_matching.engine.executor
+

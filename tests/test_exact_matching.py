@@ -19,7 +19,7 @@ from esg_matching.matcher.drm import DbMatcherDrm
 from esg_matching.matcher.irm import DbMatcherIfm
 
 # Import query manager
-from esg_matching.engine.executor.dql_manager import DqlManager
+from esg_matching.engine.sql.dql import DqlManager
 
 
 # Localization of the database to be created during the test

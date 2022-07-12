@@ -3,9 +3,9 @@
 # Import python libraries
 from abc import ABC, abstractmethod
 
-# Database connection and sql stamente executor
-from esg_matching.engine.connectors.base_connector import DbConnector
-from esg_matching.engine.executor.dml_manager import DmlManager
+# Database connection and sql stamente sql
+from esg_matching.engine.connectors.base import DbConnector
+from esg_matching.engine.sql.dml import DmlManager
 
 # Matching policy
 from esg_matching.matcher.policy import MatchingPolicy

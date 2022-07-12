@@ -6,11 +6,8 @@ Code Documentation
    :undoc-members:
    :show-inheritance:
 
-Subpackages
------------------
-
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    esg_matching.engine
    esg_matching.data_source

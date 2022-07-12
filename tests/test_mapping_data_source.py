@@ -11,7 +11,7 @@ from esg_matching.file_reader.csv_reader import FileReaderCsv
 from esg_matching.processing.etl import EtlProcessing
 
 # Import query manager
-from esg_matching.engine.executor.dql_manager import DqlManager
+from esg_matching.engine.sql.dql import DqlManager
 
 
 # Localization of the database to be created during the test

@@ -7,6 +7,7 @@ Entity-Matching
 ========================================
 
 .. toctree::
+   :maxdepth: 2
 
    project
    dependencies

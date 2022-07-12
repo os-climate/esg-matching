@@ -1,5 +1,6 @@
 File Reader
 ==================================
+
 **Package path:** esg\_matching.file\_reader
 
 .. automodule:: esg_matching.file_reader

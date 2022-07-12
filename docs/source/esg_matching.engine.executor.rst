@@ -1,29 +1,24 @@
-esg\_matching.db\_engine.executor package
+esg\_matching.db\_engine.executor
 =========================================
 
-Submodules
-----------
+**Package path:** esg\_matching.engine.executor
 
-esg\_matching.db\_engine.executor.dml\_manager module
+.. automodule:: esg_matching.engine.executor
+
+esg\_matching.engine.executor.dml\_manager
 -----------------------------------------------------
 
-.. automodule:: esg_matching.db_engine.executor.dml_manager
+.. automodule:: esg_matching.engine.executor.dml_manager
    :members:
+   :private-members:
    :undoc-members:
    :show-inheritance:
 
-esg\_matching.db\_engine.executor.dql\_manager module
+esg\_matching.engine.executor.dql\_manager
 -----------------------------------------------------
 
-.. automodule:: esg_matching.db_engine.executor.dql_manager
+.. automodule:: esg_matching.engine.executor.dql_manager
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: esg_matching.db_engine.executor
-   :members:
+   :private-members:
    :undoc-members:
    :show-inheritance:
