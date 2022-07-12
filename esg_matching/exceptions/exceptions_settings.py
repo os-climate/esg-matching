@@ -110,7 +110,7 @@ class DrmRulesEmptyInMatchingPolicy(FileSettingsError):
     message = "The [drm_rules] parameter is empty for a policy in file settings"
 
 
-class IfmRulesEmptyInMatchingPolicy(FileSettingsError):
-    """The [ifm_rules] parameter is empty for a policy from file settings"""
+class IrmRulesEmptyInMatchingPolicy(FileSettingsError):
+    """The [irm_rules] parameter is empty for a policy from file settings"""
 
-    message = "The [ifm_rules] parameter is empty for a policy in file settings"
+    message = "The [irm_rules] parameter is empty for a policy in file settings"
