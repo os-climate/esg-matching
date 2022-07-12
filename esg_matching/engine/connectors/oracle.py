@@ -27,18 +27,6 @@ class OracleConnector(DbConnector):
     __SQL_DRIVER = "cx_oracle"
 
     def __init__(self):
-        """
-            Constructor method.
-
-            Parameters:
-                No parameters required.
-
-            Returns:
-                OracleConnector (object)
-
-            Raises:
-                No exception is raised.
-        """
         super().__init__()
 
         self._username = ''
@@ -100,14 +88,6 @@ class OracleConnector(DbConnector):
         """
             Class method that overrides the super class method to prepare an oracle connection string.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return values.
-
-            Raises:
-                No exception is raised.
         """
         if self._client_driver_dir == '':
             raise exceptions_db_engine.OracleClientDriverLibNotDefined
@@ -133,14 +113,6 @@ class OracleConnector(DbConnector):
             Class method that overrides the super class method as to check the required connection parameters
             required by the Oracle database.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return values.
-
-            Raises:
-                No exception is raised.
         """
         if self._username == '' or self._user_password == '' or self._host_url == '' \
                 or self._service_name == '' or self._port_number == '':
@@ -159,8 +131,6 @@ class OracleConnector(DbConnector):
             Returns:
                 the oracle database object types: VARCHAR, VARCHAR2, NUMBER, CHAR, DATE
 
-            Raises:
-                No exception is raised.
         """
         if str_type == 'VARCHAR' or str_type == 'str':
             if size > 0:

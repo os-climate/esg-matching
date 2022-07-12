@@ -17,14 +17,6 @@ class SqlLiteConnector(DbConnector):
         """
             Constructor method.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                SqlLiteConnector (object)
-
-            Raises:
-                No exception is raised.
         """
         super().__init__()
 
@@ -46,14 +38,6 @@ class SqlLiteConnector(DbConnector):
             The “file” portion of the URL is the filename of the database.
             For a relative file path, this requires three slashes.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return values.
-
-            Raises:
-                No exception is raised.
         """
         self._string_connection = self.__DB_DIALECT + ':///' + self._path_db
 
@@ -62,14 +46,6 @@ class SqlLiteConnector(DbConnector):
             Class method that overrides the super class method as to check if the path was provided, being it
             the only parameter required to connect to a sqlite database.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return values.
-
-            Raises:
-                No exception is raised.
         """
         if self._path_db == '':
             return False

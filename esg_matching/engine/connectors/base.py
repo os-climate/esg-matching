@@ -28,14 +28,6 @@ class DbConnector(ABC):
         """
             Constructor method.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                DbConnector (object)
-
-            Raises:
-                No exception is raised.
         """
         self._string_connection = ''
         self._engine = None
@@ -70,14 +62,6 @@ class DbConnector(ABC):
             The result of this method should be stored in the private class attribute _string_connection, which
             is subsequently used by the connect() method to perform the connection to the database.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return values.
-
-            Raises:
-                No exception is raised.
         """
         pass
 
@@ -89,26 +73,12 @@ class DbConnector(ABC):
             connection is stablished. Depending on the type of database in use, it is required to perform several
             checkings regarding the connection parameters, for intance: user_name, password, host url, etc...
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return values.
-
-            Raises:
-                No exception is raised.
         """
         pass
 
     def connect(self):
         """
             Class method used to stablish a connection to the database.
-
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return values.
 
             Raises:
                 ConnectionAttributesNotDefined: when the private method class _is_ready_to_connect() returns False
@@ -131,14 +101,6 @@ class DbConnector(ABC):
         """
             Class method that closes a connection with the database and disposes the database engine object in memory.
 
-            Parameters:
-                No parameters provided.
-
-            Returns:
-                No return values.
-
-            Raises:
-                No exception is raised.
         """
 
         # Close the current session if it is open
@@ -157,14 +119,9 @@ class DbConnector(ABC):
         """
             Class method that checks if a database connection object exists and is ready to use.
 
-            Parameters:
-                No parameters provided.
-
             Returns:
                 True if a connection object exists or False otherwise.
 
-            Raises:
-                No exception is raised.
         """
         if self._engine is None:
             return False
@@ -181,9 +138,6 @@ class DbConnector(ABC):
 
             Parameters:
                 session_type (str): the type of session being created - 'normal' or 'scoped'
-
-            Returns:
-                No return values.
 
             Raises:
                 SessionAlreadyExists: if a session already exists for the connectors.
@@ -208,12 +162,6 @@ class DbConnector(ABC):
         """
             Class method that closes the current session.
 
-            Parameters:
-                No parameters provided.
-
-            Returns:
-                No return values.
-
             Raises:
                 NoSessionOpen: when there is no session to be closed.
         """
@@ -227,14 +175,9 @@ class DbConnector(ABC):
         """
             Class method that checks if there is a session object open and ready to use.
 
-            Parameters:
-                No parameters provided.
-
             Returns:
                 True if a session object exists or False otherwise.
 
-            Raises:
-                No exception is raised.
         """
         if self._current_session is None:
             return False
@@ -244,12 +187,6 @@ class DbConnector(ABC):
     def commit_changes(self):
         """
             Class method that commits (confirm) the operations executed during the current session.
-
-            Parameters:
-                No parameters provided.
-
-            Returns:
-                No return values.
 
             Raises:
                 NoSessionOpen: when there is no session to execute the commit operation
@@ -262,12 +199,6 @@ class DbConnector(ABC):
     def rollback_changes(self):
         """
             Class method that rollback (cancel out) the operations executed during the current session.
-
-            Parameters:
-                No parameters provided.
-
-            Returns:
-                No return values.
 
             Raises:
                 NoSessionOpen: when there is no session to execute the commit operation
@@ -350,14 +281,6 @@ class DbConnector(ABC):
         """
             Class method that returns the equivalent database null object
 
-            Parameters:
-                No parameters provided.
-
-            Returns:
-                the database null object
-
-            Raises:
-                No exception is raised
         """
         return sa.sql.null()
 
@@ -367,9 +290,6 @@ class DbConnector(ABC):
 
             Parameters:
                 table_obj (sqlalchemy.sql.schema.Table): metadata object that represents the table in the database
-
-            Returns:
-                No return values.
 
             Raises:
                 ConnectionNotDefined: when there is no connection with the database
