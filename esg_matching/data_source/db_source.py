@@ -2,9 +2,9 @@
 
 import pandas as pd
 
-from esg_matching.engine.connectors.base_connector import DbConnector
-from esg_matching.engine.executor.dql_manager import DqlManager
-from esg_matching.engine.executor.dml_manager import DmlManager
+from esg_matching.engine.connectors.base import DbConnector
+from esg_matching.engine.sql.dql import DqlManager
+from esg_matching.engine.sql.dml import DmlManager
 from esg_matching.engine.builders.table_builder import TableBuilder
 from esg_matching.engine.builders.column_builder import ColumnBuilder
 from esg_matching.exceptions import exceptions_data_source
@@ -12,40 +12,11 @@ from esg_matching.exceptions import exceptions_data_source
 
 class DbDataSource:
     """
-        This class provides a base structure to build a datasource object that represents a table in a database.
-
-        Attributes:
-            _db_connector (DbConnector): a database engine
-            _table_name (str): the name of the database table
-            _table_obj (sqlalchemy.sql.schema.Table): metadata object that represents the table in the database
-            _name (str): a descriptive/short name for the datasource
-            _primary_keys (list): a list representing the name of the primary keys columns
-            _original_attributes_to_ds (dict): dictionary with the original atribute name (from a file header)
-                as key and the attribute name in the database table as the dictionary value.
-            _matching_role (str): indicates if the datasource is target or referential in the macthing process
-            _matching_alias (dict): maps attribute names of the database table to alias name (matching names).
-                The alias name is the dictionary key, while the real attribute name is the value for that key.
-            _map_to_matching (dict): maps attribute names of the database table to attribute names
-                of the database table used to store positive matchings.
-            _matching_policies_settings (dict): dictionary that describes the matching policies available for
-                the datasource. This information comes from the json file associated to the datasource.
-            _dml_manager (DmlManager): object that allows to perform insert, update and delete in the database table
-            _dql_manager (DqlManager): object that allows to perform select in the database table
+        This class provides a base structure to build a datasource object that represents a table in a database
+        to be used in a matching scenario.
     """
 
     def __init__(self, db_connector: DbConnector, name: str):
-        """
-            Constructor method.
-
-            Parameters:
-                db_connector (DbConnector): database connectors
-
-            Returns:
-                DbDataSource (object)
-
-            Raises:
-                No exception is raised.
-        """
         self._db_connector = db_connector
         self._table_name = ''
         self._table_obj = None
@@ -53,6 +24,7 @@ class DbDataSource:
         self._primary_keys = None
         self._original_attributes_to_ds = {}
         self._matching_role = 'target'
+        self._policy_name = ''
         self._matching_alias = {}
         self._map_to_matching = {}
         self._matching_policies_settings = {}
@@ -89,6 +61,14 @@ class DbDataSource:
         self._matching_role = new_matching_role
 
     @property
+    def policy_name(self):
+        return self._policy_name
+
+    @policy_name.setter
+    def policy_name(self, new_policy_name: str):
+        self._policy_name = new_policy_name
+
+    @property
     def auto_columns(self):
         return self._auto_columns
 
@@ -100,15 +80,6 @@ class DbDataSource:
         """
             Class private method that takes the name of all primary keys from the metadata table and store them at the
                 class property called _primary_keys (list).
-
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         self._primary_keys = [pk_column.name for pk_column in self._table_obj.primary_key.columns.values()]
 
@@ -119,14 +90,6 @@ class DbDataSource:
             to mantain the integrity of the mapping attributes, it's assumed the original attribute names and the
             table attribute names are the same.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         for column_name in self._table_obj.columns:
             self._original_attributes_to_ds[column_name] = column_name
@@ -142,8 +105,6 @@ class DbDataSource:
                 True when the name is indeed an attribute name of the metadata table,
                 False otherwise.
 
-            Raises:
-                No exception is raised.
         """
         for column in self._table_obj.columns:
             if column.name == attribute_name:
@@ -161,8 +122,6 @@ class DbDataSource:
                 True when all names are mapped as an alias attribute name of the datasource, or
                 False if at least one name fails the checking.
 
-            Raises:
-                No exception is raised.
         """
         for alias in aliases:
             if alias not in self._matching_alias:
@@ -173,15 +132,10 @@ class DbDataSource:
         """
             Class method that checks if the datasource was synchronized with the database table.
 
-            Parameters:
-                No parameters required.
-
             Returns:
                 True when the datasource contains the metadata table synchronized with the database, or
                 False otherwise.
 
-            Raises:
-                No exception is raised.
         """
         if self._table_obj is None:
             return False
@@ -193,9 +147,6 @@ class DbDataSource:
             Class method that returns the attribute names associated with the original attribute header of a file that
                 originated the datasource. In case of the datasource not being created from a file, the original
                 attribute names are the same as the attribute names of the reflected database table.
-
-            Parameters:
-                No parameters required.
 
             Returns:
                 (list) with all original attribute names.
@@ -211,9 +162,6 @@ class DbDataSource:
     def get_attribute_names(self, remove_auto_cols=False):
         """
             Class method that returns the attribute names associated with the reflected database table.
-
-            Parameters:
-                No parameters required.
 
             Returns:
                 (list) with all attribute names of the reflected database table associated to the datasource.
@@ -237,9 +185,6 @@ class DbDataSource:
     def get_primary_keys(self):
         """
             Class method that returns the primary key names associated with the reflected database table.
-
-            Parameters:
-                No parameters required.
 
             Returns:
                 (list) with all primary key names of the reflected database table associated to the datasource.
@@ -355,9 +300,6 @@ class DbDataSource:
                 original_name (str): original attribute name (from a header file)
                 attribute_name (str): attribute name of the reflected database table associated to the datasource.
 
-            Returns:
-                No return value.
-
             Raises:
                 exceptions_data_source.OriginalNameAlreadyMapped when the given original name was already mapped
                     to a datasource attribute.
@@ -373,9 +315,6 @@ class DbDataSource:
             Parameters:
                 alias_name (str): short name that works as an alias for an attribute name of the database table.
                 attribute_name (str): the attribute name of the database table.
-
-            Returns:
-                No return value.
 
             Raises:
                 exceptions_data_source.AttributeNotInDataSource when the given attribute name is not an attribute of
@@ -400,9 +339,6 @@ class DbDataSource:
                 attribute_name (str): the attribute name of the database table associate to the datasource.
                 matching_attribute_name (str): the attribute name of the matching table
 
-            Returns:
-                No return value.
-
             Raises:
                 exceptions_data_source.AttributeNotInDataSource when the given attribute name is not an attribute of
                     the datasource.
@@ -419,20 +355,17 @@ class DbDataSource:
 
             Parameters:
                 policy_name (str): the policy name
-                matching_type (str): the matching type ('dfm', 'drm' or 'ifm')
+                matching_type (str): the matching type ('dfm', 'drm' or 'irm')
                 rule_name (str): a short name for the rule
                 alias_list (list): a list with aliases for attribute names
 
-            Returns:
-                No return value.
-
             Raises:
                 exceptions_data_source.MatchingTypeInPolicyDefinitionNotSupported when the matching type is
-                    different from 'dfm', 'drm' or 'ifm'.
+                    different from 'dfm', 'drm' or 'irm'.
                 exceptions_data_source.AliasNotInDataSource when some alias from the list is not mapped to any
                     datasource attribute.
         """
-        if matching_type not in ['dfm', 'drm', 'ifm']:
+        if matching_type not in ['dfm', 'drm', 'irm']:
             raise exceptions_data_source.MatchingTypeInPolicyDefinitionNotSupported
 
         if not self.is_valid_aliases(alias_list):
@@ -460,7 +393,7 @@ class DbDataSource:
 
             Raises:
                 exceptions_data_source.MatchingTypeInPolicyDefinitionNotSupported when the matching type is
-                    different from 'dfm', 'drm' or 'ifm'.
+                    different from 'dfm', 'drm' or 'irm'.
                 exceptions_data_source.AliasNotInDataSource when some alias from the list is not mapped to any
                     datasource attribute.
         """
@@ -608,12 +541,6 @@ class DbDataSource:
             Parameters:
                 table_name (str): table name
                 db_columns (list): a list of columns (sqlalchemy.sql.schema.Column)
-
-            Returns:
-                No return value.
-
-            Raises:
-                No exception raised.
         """
         table_builder = TableBuilder(self._db_connector)
         table_object = table_builder.create_table(table_name).add_columns(db_columns).execute()
@@ -629,11 +556,6 @@ class DbDataSource:
                 table_name (str): table name
                 df (pd.DataFrame): pandas dataframe that contains the structure of the table to be created
 
-            Returns:
-                No return value.
-
-            Raises:
-                No exception raised.
         """
         self._table_name = table_name
         columns_db = []
@@ -648,12 +570,6 @@ class DbDataSource:
         """
             Class method that drops the table associated to the datasource from the database.
 
-            Parameters:
-                No parameter required.
-
-            Returns:
-                No return value.
-
             Raises:
                 exceptions_data_source.DataSourceNotSynchronizedWithDbTable when the datasource was not syncronized
                     with its equivalent database table object. See sync_with_db_table() method.
@@ -667,12 +583,6 @@ class DbDataSource:
     def delete_all_entries(self):
         """
             Class method that deletes all entries from the table associated to the datasource.
-
-            Parameters:
-                No parameter required.
-
-            Returns:
-                No return value.
 
             Raises:
                 exceptions_data_source.DataSourceNotSynchronizedWithDbTable when the datasource was not syncronized
@@ -690,11 +600,6 @@ class DbDataSource:
             Parameters:
                 data_row (): a row created as NamedTuple('FileRecord', attributes_row)
 
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         # Create the data set specification as follows:
         # Each element in the list represents a row to be inserted in the table in the following format:
@@ -714,9 +619,6 @@ class DbDataSource:
     def get_total_entries(self):
         """
             Class method that returns the total entries of the database table associated to the datasource.
-
-            Parameters:
-                No parameters required.
 
             Returns:
                 0 : if there is no rows
@@ -759,9 +661,6 @@ class DbDataSource:
             Class method that returns all entries of the database table associated with the datasource in the format
                 of a pandas DataFrame.
 
-            Parameters:
-                No parameters required.
-
             Returns:
                 df_result (DataFrame): pandas dataframe representing the content of the database table
 
@@ -779,9 +678,6 @@ class DbDataSource:
         """
             Class method that returns all entries of the database table associated with the datasource in the format
                 of a list. Each element of the list is equivalent to a row in the database table.
-
-            Parameters:
-                No parameters required.
 
             Returns:
                 df_result (list): list representing the content of the database table
