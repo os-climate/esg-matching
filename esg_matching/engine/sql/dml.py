@@ -16,18 +16,6 @@ class DmlManager:
     """
 
     def __init__(self, db_connector: DbConnector):
-        """
-            Constructor method.
-
-            Parameters:
-                db_connector (DbConnector): database connectors
-
-            Returns:
-                DmlManager (object)
-
-            Raises:
-                No exception is raised.
-        """
         self._db_connector = db_connector
 
     def delete_all_entries(self, table_obj: sa.Table, must_commit: bool = True):
@@ -39,11 +27,6 @@ class DmlManager:
                 table_obj (sqlalchemy.sql.schema.Table): metadata object that represents the table in the database
                 must_commit (bool): indicates to commit the changes immediately
 
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         can_close_session = False
         if self._db_connector.session is None:
@@ -68,11 +51,6 @@ class DmlManager:
                 data (dict): a list with all the values to be inserted in the table as follows:
                     [{'col1': 'value', 'col2': 'value'},{'col1': 'value', 'col2': 'value'}]
 
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         insert_stmt = table_obj.insert().values(data)
         if self._db_connector.session is None:
@@ -91,11 +69,6 @@ class DmlManager:
                 that will receive the values retrieved from the select clause.
                 select_obj (select_query): a select clause from sqlalchemy
 
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         insert_stm = table_obj.insert().from_select(columns_obj, select_obj)
         if self._db_connector.session is None:
@@ -117,11 +90,6 @@ class DmlManager:
             Parameters:
                 sql_stm: sqlalchemy statement that does not return a value, to be executed in the database.
 
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         if self._db_connector.session is None:
             self._db_connector.engine.execute(sql_stm)

@@ -18,18 +18,6 @@ class DqlManager:
     """
 
     def __init__(self, db_connector: DbConnector):
-        """
-            Constructor method.
-
-            Parameters:
-                db_connector (DbConnector): database connectors
-
-            Returns:
-                DqlManager (object)
-
-            Raises:
-                No exception is raised.
-        """
         self._db_connector = db_connector
 
     def get_total_entries(self, table_obj):
@@ -43,8 +31,6 @@ class DqlManager:
                 0 : if there is no unique rows
                 number (int): the total of unique rows
 
-            Raises:
-                No exception is raised.
         """
         # Create sql statement
         # SELECT COUNT(*) FROM Table
@@ -71,8 +57,6 @@ class DqlManager:
                 0 : if there is no unique rows
                 number (int): the total of unique rows
 
-            Raises:
-                No exception is raised.
         """
         # Create sql statement
         # SELECT COUNT(DISTINCT Column) FROM Table.Column
@@ -103,8 +87,6 @@ class DqlManager:
             Returns:
                 df_table (pandas dataframe): a pandas dataframe representing a full select in the table object
 
-            Raises:
-                No exception is raised.
         """
         query_table = sa.select([table_obj])
         df_table = pd.read_sql_query(query_table, self._db_connector.engine)
@@ -126,8 +108,6 @@ class DqlManager:
                      ('SKYNET', 'GERMANY', 'DE0005545503', '5299003VKVDCUPSS5X23', '5734672'),
                      ('WAYNE ENTERPRISES', 'ITALY', 'IT0005083180', '549300RV0WBR05UTDI91', '')]
 
-            Raises:
-                No exception is raised.
         """
         query_table = sa.select([table_obj])
         connection = self._db_connector.engine.connect()
@@ -153,8 +133,6 @@ class DqlManager:
                      ('SKYNET', 'GERMANY', 'DE0005545503', '5299003VKVDCUPSS5X23', '5734672'),
                      ('WAYNE ENTERPRISES', 'ITALY', 'IT0005083180', '549300RV0WBR05UTDI91', '')]
 
-            Raises:
-                No exception is raised.
         """
         connection = self._db_connector.engine.connect()
         if as_pandas_df:
