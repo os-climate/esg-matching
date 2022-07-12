@@ -7,7 +7,7 @@ from esg_matching.exceptions import exceptions_file
 from esg_matching.engine.connectors.base import DbConnector
 from esg_matching.data_source.db_source import DbDataSource
 from esg_matching.data_source.db_match import DbMatchDataSource
-from esg_matching.engine.builders.column_builder import ColumnBuilder
+from esg_matching.engine.builders.table_builder import ColumnBuilder
 
 from esg_matching.report.report_manager import ReportManager
 

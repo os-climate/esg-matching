@@ -5,8 +5,7 @@ import pandas as pd
 from esg_matching.engine.connectors.base import DbConnector
 from esg_matching.engine.sql.dql import DqlManager
 from esg_matching.engine.sql.dml import DmlManager
-from esg_matching.engine.builders.table_builder import TableBuilder
-from esg_matching.engine.builders.column_builder import ColumnBuilder
+from esg_matching.engine.builders.table_builder import TableBuilder, ColumnBuilder
 from esg_matching.exceptions import exceptions_data_source
 
 

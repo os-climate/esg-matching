@@ -11,10 +11,10 @@ from esg_matching.engine.sql.dml import DmlManager
 from esg_matching.matcher.policy import MatchingPolicy
 
 # Builders
-from esg_matching.engine.builders.column_builder import ColumnBuilder
-from esg_matching.engine.builders.select_builder import SelectBuilder
-from esg_matching.engine.builders.delete_builder import DeleteBuilder
-from esg_matching.engine.builders.sql_condition_builder import SqlConditionBuilder
+from esg_matching.engine.builders.table_builder import ColumnBuilder
+from esg_matching.engine.builders.sql_builder import SelectBuilder
+from esg_matching.engine.builders.sql_builder import DeleteBuilder
+from esg_matching.engine.builders.sql_builder import SqlConditionBuilder
 
 
 class DbMatcher(ABC):
