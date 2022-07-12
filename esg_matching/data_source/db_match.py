@@ -4,7 +4,7 @@ allows to create a matching datasource object to represent a matching or no-matc
 import pandas as pd
 
 from esg_matching.data_source.db_source import DbDataSource
-from esg_matching.engine.connectors.base import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 from esg_matching.exceptions import exceptions_data_source
 
 

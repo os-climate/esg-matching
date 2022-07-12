@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from esg_matching.engine.connectors.base import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 from esg_matching.engine.sql.dql import DqlManager
 from esg_matching.engine.sql.dml import DmlManager
 from esg_matching.engine.builders.table_builder import TableBuilder, ColumnBuilder

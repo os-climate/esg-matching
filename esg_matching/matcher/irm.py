@@ -1,7 +1,7 @@
 """ Base class allows to create a matcher that performs indirect matching on a database """
 
 from esg_matching.matcher.db_matcher import DbMatcher
-from esg_matching.engine.connectors.base import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 from esg_matching.matcher.policy import MatchingPolicy
 from esg_matching.exceptions import exceptions_matching_policy
 

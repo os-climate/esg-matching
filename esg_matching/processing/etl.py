@@ -4,7 +4,7 @@ from esg_matching.file_reader.file import File
 from esg_matching.file_reader.csv_reader import FileReader
 from esg_matching.exceptions import exceptions_file
 
-from esg_matching.engine.connectors.base import DbConnector
+from esg_matching.engine.connectors.base_connector import DbConnector
 from esg_matching.data_source.db_source import DbDataSource
 from esg_matching.data_source.db_match import DbMatchDataSource
 from esg_matching.engine.builders.table_builder import ColumnBuilder
