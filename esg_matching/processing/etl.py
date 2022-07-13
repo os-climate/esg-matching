@@ -116,6 +116,7 @@ class EtlProcessing:
             self._data_source.map_indirect_matching = self._file.settings.map_indirect_matching
         self._data_source.table_name = self._file.settings.datasource_table_name
         self._data_source.matching_role = self._file.settings.matching_role
+        self._data_source.policy_name = self._file.settings.policy_name
 
         # If table exists
         if self._db_connector.table_exists(self._data_source.table_name):
@@ -224,7 +225,7 @@ class EtlProcessing:
             self._data_source.map_attribute_names(column_name, column_name)
         return columns_data_source
 
-    def _process_csv_file(self):
+    def _process_csv_file_bulk_sql(self):
         """
             Private class method that reads the csv file and insert the row to the correspondent database table
 
@@ -246,9 +247,33 @@ class EtlProcessing:
         self._file_reader.attributes_to_read = self._data_source.get_original_attribute_names()
 
         # Read the file, row by row
-        print(self._file.filename)
         for file_row in self._file_reader.read_file(self._file.filename):
             self._data_source.insert_row(file_row)
+
+    def _process_csv_file_bulk_pd(self):
+        """
+            Private class method that reads the csv file and insert the row to the correspondent database table
+
+            Parameters:
+                No parameter required.
+
+            Returns:
+                No return value.
+
+            Raises:
+                No exception is raised.
+        """
+
+        # Set up the encoding and separator
+        self._file_reader.encoding = self._file.settings.file_encoding
+        self._file_reader.separator = self._file.settings.file_separator
+
+        # Set the fields to read from file
+        self._file_reader.attributes_to_read = self._data_source.get_original_attribute_names()
+        self._file_reader.renamed_attributes = self._data_source.get_attribute_names()
+
+        # Read the file
+        self._file_reader.read_file_with_pd(self._file.filename, self._data_source.table_name, self._db_connector)
 
     def load_file_to_db(self, file: File, file_reader: FileReader):
         """
@@ -276,9 +301,13 @@ class EtlProcessing:
         # Create a datasource object from file settings
         self._create_db_source()
 
-        # Process the file
-        if self._file.extension == '.csv':
-            self._process_csv_file()
+        # Process the file, by reading it line by line and performing bulk sql insert for speed
+        if self._file.extension == '.csv' and self._file.settings.read_mode=='bulk-sql':
+            self._process_csv_file_bulk_sql()
+
+        # Process the file, by reading it using pandas dataframe in a bulk setup for speed
+        if self._file.extension == '.csv' and self._file.settings.read_mode == 'bulk-pd':
+            self._process_csv_file_bulk_pd()
 
         # Update datasource mappings
         self._update_data_source_mappings()
