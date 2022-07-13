@@ -6,6 +6,8 @@
 # Import python libraries
 from csv import DictReader
 from typing import NamedTuple
+import pandas as pd
+import numpy as np
 
 # Import internal libraries
 from esg_matching.file_reader.base_reader import FileReader
@@ -68,6 +70,13 @@ class FileReaderCsv(FileReader):
         file_record = NamedTuple('FileRecord', attributes_row)
         return file_record
 
+    def _get_selected_attributes(self, file_row):
+        new_file_row = {}
+        for attribute_name in file_row.keys():
+            if attribute_name in self._attributes_to_read:
+                new_file_row[attribute_name] = file_row[attribute_name]
+        return new_file_row
+
     def read_file_header_columns(self, file_path):
         """
             Class method that reads only the header of a csv file.
@@ -91,7 +100,7 @@ class FileReaderCsv(FileReader):
             csv_reader = DictReader(csv_file, delimiter=self._separator)
 
             # get column names from the csv file
-            csv_column_names = list(csv_reader.fieldnames)
+            csv_column_names = csv_reader.fieldnames
             if len(csv_column_names) == 0:
                 raise exceptions_file.NoHeaderInFile
 
@@ -149,6 +158,25 @@ class FileReaderCsv(FileReader):
                 # the result of the unpack will be something like this:
                 # FileRecord(UNIQUE_ID='1', ISIN='SK1120005824', COMPANY='CENTRAL PERK', COUNTRY='SK')
                 count_lines += 1
-                row_object = file_record(**file_line)
+                line_selected_attributes = self._get_selected_attributes(file_line)
+                row_object = file_record(**line_selected_attributes)
                 yield row_object
             self._total_lines = count_lines
+
+    def _adjust_dtype(self, df, db_conn):
+        cols = df.select_dtypes(include='object')
+        column_type_db = db_conn.get_column_type()
+        dtypes = {col: column_type_db for col in cols}
+        return dtypes
+
+    def read_file_with_pd(self, file_path, table_name, db_conn):
+        df = pd.read_csv(file_path, sep=self._separator, dtype=object, low_memory=False)
+        columns = self._attributes_to_read
+        df = df[columns]
+        df.columns = self._renamed_attributes
+        for attribute in self._renamed_attributes:
+            df[attribute] = df[attribute].astype(str)
+            mask = df[attribute] == 'nan'
+            df.loc[mask, attribute] = np.nan
+        db_types = self._adjust_dtype(df, db_conn)
+        df.to_sql(name=table_name, con=db_conn.engine, index=False, if_exists='append', dtype=db_types, chunksize=1000)

@@ -36,6 +36,7 @@ class FileReader(ABC):
         self._total_attributes = 0
         self._total_attributes_read = 0
         self._attributes_to_read = None
+        self._renamed_attributes = None
 
     @property
     def extension_supported(self):
@@ -66,6 +67,16 @@ class FileReader(ABC):
     def attributes_to_read(self, attributes_to_read: list):
         """Sets the list of attribute names to read from the file."""
         self._attributes_to_read = attributes_to_read
+
+    @property
+    def renamed_attributes(self):
+        """Returns the list of attribute names to read from the file."""
+        return self._renamed_attributes
+
+    @renamed_attributes.setter
+    def renamed_attributes(self, renamed_attributes: list):
+        """Sets the list of attribute names to read from the file."""
+        self._renamed_attributes = renamed_attributes
 
     @abstractmethod
     def read_file(self, file_path: str):

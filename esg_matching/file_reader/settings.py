@@ -61,6 +61,7 @@ class JsonSettings:
         self.filename_pattern = ''
         self.file_encoding = 'utf-8'
         self.file_separator = ';'
+        self.read_mode = 'bulk-sql'
 
         # Data source settings
         self.datasource_name = 'unknown'
@@ -70,6 +71,7 @@ class JsonSettings:
         self.datasource_primary_keys = None
         self.datasource_attributes = None
         self.matching_role = 'target'
+        self.policy_name = ''
         self.matching_id = ''
         self.matching_alias = None
         self.map_to_matching = None
@@ -117,6 +119,8 @@ class JsonSettings:
                 self.file_encoding = sub_dict['encoding']
             if 'separator' in sub_dict:
                 self.file_separator = sub_dict['separator']
+            if 'read_mode' in sub_dict:
+                self.read_mode = sub_dict['read_mode']
 
     def _set_data_source_settings(self, settings_json: dict):
         """
@@ -168,6 +172,8 @@ class JsonSettings:
                 if value_dict not in ['referential', 'target', 'matching', 'no-matching']:
                     raise exceptions_settings.MatchingRoleNotRecognized
                 self.matching_role = value_dict
+            if 'policy_name' in sub_dict:
+                self.policy_name = sub_dict['policy_name']
             if 'matching_id' in sub_dict:
                 self.matching_id = sub_dict['matching_id']
             if 'matching_alias' in sub_dict:
@@ -231,8 +237,8 @@ class JsonSettings:
                     rules_dict = policy_dict['drm']
                     if len(rules_dict) == 0:
                         raise exceptions_settings.DrmRulesEmptyInMatchingPolicy
-                if 'ifm' in policy_dict:
-                    rules_dict = policy_dict['ifm']
+                if 'irm' in policy_dict:
+                    rules_dict = policy_dict['irm']
                     if len(rules_dict) == 0:
-                        raise exceptions_settings.IfmRulesEmptyInMatchingPolicy
+                        raise exceptions_settings.IrmRulesEmptyInMatchingPolicy
             self.matching_policy = sub_dict
