@@ -6,12 +6,12 @@ from esg_matching.matcher.policy import MatchingPolicy
 from esg_matching.exceptions import exceptions_matching_policy
 
 
-class DbMatcherIfm(DbMatcher):
+class DbMatcherIrm(DbMatcher):
     """
         This base class provides the infrastructure needed to perform direct residual matching in a database.
 
         Attributes: (see DbMatcher)
-            'indirect_matching': (inm) performs a matching between a main target and other targets, but only on the
+            'indirect_matching': (irm) performs a matching between a main target and other targets, but only on the
                                     entries by which the other targets were previously and successfully matched to
                                     a referential. In other words, the indirect matching applies the join condition
                                     rules on the no-matching (residual records) and the matching table, so that
@@ -33,7 +33,7 @@ class DbMatcherIfm(DbMatcher):
                 No exception is raised.
         """
         super().__init__(db_connector)
-        self._matching_type = 'ifm'
+        self._matching_type = 'irm'
         self._literal_matching_type = 'indirect'
         self._literal_matching_scope = 'full'
 
@@ -92,13 +92,13 @@ class DbMatcherIfm(DbMatcher):
         # WHERE no-matching.datasource = 'datasource_name' ....
         tgt_name = self._tgt_source.name
 
-        no_match_tgt = self._no_matching_source.get_table_column('TGT_NAME')
+        no_match_tgt = self._no_matching_source.get_table_column('tgt_name')
         self._where_condition_builder = self._where_condition_builder.create_condition()
         self._where_condition_builder = self._where_condition_builder.equal_value(no_match_tgt, tgt_name)
         first_condition = self._where_condition_builder.get_condition()
 
         # ...AND matching.datasource != 'datasource_name'
-        match_tgt = self._matching_source.get_table_column('TGT_NAME')
+        match_tgt = self._matching_source.get_table_column('tgt_name')
         self._where_condition_builder = self._where_condition_builder.create_condition()
         self._where_condition_builder = self._where_condition_builder.not_equal_value(match_tgt, tgt_name)
         where_condition = self._where_condition_builder.and_condition(first_condition).get_condition()
@@ -123,7 +123,7 @@ class DbMatcherIfm(DbMatcher):
         """
         literal_db_cols = []
         literal_db_cols = self._add_literal_cols_type_match(rule_name, literal_db_cols)
-        literal_name_cols = ['MATCHING_TYPE', 'MATCHING_SCOPE', 'MATCHING_RULE']
+        literal_name_cols = ['matching_type', 'matching_scope', 'matching_rule']
 
         return literal_db_cols, literal_name_cols
 
@@ -174,18 +174,10 @@ class DbMatcherIfm(DbMatcher):
         """
             Class method that executes the direct full matching (DFM), a join between referential and target tables.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         # Open a session if one does not exist already
-        if not self._db_connector.has_session_open():
-            self._db_connector.create_session()
+        # if not self._db_connector.has_session_open():
+        #    self._db_connector.create_session()
         for rule_key in self._matching_rules:
             # ------ MATCHING PROCESS ------
             # Process positive matchings: this is basically an INSERT into the MATCHING_TABLE taken values
@@ -226,6 +218,6 @@ class DbMatcherIfm(DbMatcher):
             self._dml_manager.delete_data(delete_stm)
 
             # Commit changes
-            self._db_connector.commit_changes()
+            # self._db_connector.commit_changes()
         # Close the session
-        self._db_connector.close_session()
+        # self._db_connector.close_session()

@@ -26,8 +26,6 @@ class DbMatcherDfm(DbMatcher):
             Returns:
                 DbMatcherDfm (object)
 
-            Raises:
-                No exception is raised.
         """
         super().__init__(db_connector)
         self._matching_type = 'dfm'
@@ -46,8 +44,6 @@ class DbMatcherDfm(DbMatcher):
                 True if the matcher is described as a matching process in the given policy, or
                 False, otherwise.
 
-            Raises:
-                No exception is raised.
         """
         # Check if the policy contains rules to perform the direct full matching
         if not policy.has_rule_type(self._matching_type):
@@ -68,8 +64,6 @@ class DbMatcherDfm(DbMatcher):
                 join_condition (sqlalchemy.sql.expression): the join condition
                 where_condition (sqlalchemy.sql.expression): the where condition
 
-            Raises:
-                No exception is raised.
         """
         # Build the condition for the join and where clauses
         join_condition = None
@@ -99,19 +93,11 @@ class DbMatcherDfm(DbMatcher):
             It also builds the no-matching, a left join between referential and target tables where the referencial
             is null because it did not match.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         # Open a session if one does not exist already so that the matching and no-matching results are
         # added  and commited to their respective database tables during that session.
-        if not self._db_connector.has_session_open():
-            self._db_connector.create_session()
+        # if not self._db_connector.has_session_open():
+        #    self._db_connector.create_session()
         for rule_key in self._matching_rules:
             # ------ MATCHING PROCESS ------
             # Process positive matchings: this is basically an INSERT into the MATCHING_TABLE taken values
@@ -148,6 +134,6 @@ class DbMatcherDfm(DbMatcher):
             self._dml_manager.insert_into_from_select(self._no_matching_table, no_matching_db_cols, select_stm)
 
             # Commit changes
-            self._db_connector.commit_changes()
+            # self._db_connector.commit_changes()
         # Close the session
-        self._db_connector.close_session()
+        # self._db_connector.close_session()

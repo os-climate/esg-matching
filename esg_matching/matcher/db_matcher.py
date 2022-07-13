@@ -58,18 +58,6 @@ class DbMatcher(ABC):
     """
 
     def __init__(self, db_connector: DbConnector):
-        """
-            Constructor method.
-
-            Parameters:
-                db_connector (DbConnector): database connectors
-
-            Returns:
-                DbMatcher (object)
-
-            Raises:
-                No exception is raised.
-        """
         self._db_connector = db_connector
 
         # Elements extracted from the matching policy for the matcher type
@@ -109,9 +97,6 @@ class DbMatcher(ABC):
                 policy (MatchingPolicy) : the matching policy contains the description of the join rules as well as
                                         the mappings of attributes beetween target, referential and matching/
                                         no-matching tables.
-
-            Returns:
-                No return value.
 
             Raises:
                 exceptions_data_source.DirectFullMatchingNotInPolicy when the mapping between original names and
@@ -176,8 +161,6 @@ class DbMatcher(ABC):
                 True if the matcher is described as a matching process in the given policy, or
                 False, otherwise.
 
-            Raises:
-                No exception is raised.
         """
         pass
 
@@ -195,8 +178,6 @@ class DbMatcher(ABC):
                 join_condition (sqlalchemy.sql.expression): the join condition
                 where_condition (sqlalchemy.sql.expression): the where condition
 
-            Raises:
-                No exception is raised.
         """
         pass
 
@@ -213,16 +194,14 @@ class DbMatcher(ABC):
             Returns:
                 literal_db_cols (list): list of sqlalchemy.sql.schema.Column objects with fixed values.
 
-            Raises:
-                No exception is raised.
         """
-        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_TYPE')
+        name_std_col = self._matching_source.get_std_attribute_name('matching_type')
         list_to_add_to.append(self._column_builder.create_literal_column(self._literal_matching_type, name_std_col))
 
-        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_SCOPE')
+        name_std_col = self._matching_source.get_std_attribute_name('matching_scope')
         list_to_add_to.append(self._column_builder.create_literal_column(self._literal_matching_scope, name_std_col))
 
-        name_std_col = self._matching_source.get_std_attribute_name('MATCHING_RULE')
+        name_std_col = self._matching_source.get_std_attribute_name('matching_rule')
         list_to_add_to.append(self._column_builder.create_literal_column(rule_name, name_std_col))
         return list_to_add_to
 
@@ -240,17 +219,15 @@ class DbMatcher(ABC):
                 literal_db_cols (list): list of sqlalchemy.sql.schema.Column objects with fixed values.
                 literal_name_cols (list): list with the names of all literal columns created.
 
-            Raises:
-                No exception is raised.
         """
         literal_db_cols = []
         tgt_name = self._tgt_source.name
         ref_name = self._ref_source.name
 
-        name_std_col = self._matching_source.get_std_attribute_name('REF_NAME')
+        name_std_col = self._matching_source.get_std_attribute_name('ref_name')
         literal_db_cols.append(self._column_builder.create_literal_column(ref_name, name_std_col))
 
-        name_std_col = self._matching_source.get_std_attribute_name('TGT_NAME')
+        name_std_col = self._matching_source.get_std_attribute_name('tgt_name')
         literal_db_cols.append(self._column_builder.create_literal_column(tgt_name, name_std_col))
 
         literal_db_cols = self._add_literal_cols_type_match(rule_name, literal_db_cols)
@@ -271,12 +248,10 @@ class DbMatcher(ABC):
                 literal_db_cols (list): list of sqlalchemy.sql.schema.Column objects with fixed values.
                 literal_name_cols (list): list with the names of all literal columns created.
 
-            Raises:
-                No exception is raised.
         """
         literal_db_cols = []
         tgt_name = self._tgt_source.name
-        literal_db_cols.append(self._column_builder.create_literal_column(tgt_name, 'TGT_NAME'))
+        literal_db_cols.append(self._column_builder.create_literal_column(tgt_name, 'tgt_name'))
         literal_name_cols = self._no_matching_source.get_std_attribute_names()
         return literal_db_cols, literal_name_cols
 
@@ -297,8 +272,6 @@ class DbMatcher(ABC):
                      columns, columns from the target datasource and columns from the referential datasource.
                 select_name_cols (list): list with the names of all select_db_cols.
 
-            Raises:
-                No exception is raised.
         """
         literal_db_cols, literal_name_cols = self._get_literal_cols_match(rule_name)
         tgt_db_cols = self._tgt_source.get_db_cols_mapped_to_matching()
@@ -325,8 +298,6 @@ class DbMatcher(ABC):
                      columns, columns from the target datasource and columns from the referential datasource.
                 select_name_cols (list): list with the names of all select_db_cols.
 
-            Raises:
-                No exception is raised.
         """
         literal_db_cols, literal_name_cols = self._get_literal_cols_no_match()
         tgt_db_cols = self._tgt_source.get_db_cols_mapped_to_matching()
@@ -340,13 +311,5 @@ class DbMatcher(ABC):
         """
             Class method that executes the matching.
 
-            Parameters:
-                No parameters required.
-
-            Returns:
-                No return value.
-
-            Raises:
-                No exception is raised.
         """
         pass

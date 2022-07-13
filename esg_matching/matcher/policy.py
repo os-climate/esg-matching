@@ -93,8 +93,8 @@ class MatchingPolicy:
             self._rules_direct_full_matching = self._policy_definition['dfm']
         if 'drm' in self._policy_definition:
             self._rules_direct_residual_matching = self._policy_definition['drm']
-        if 'ifm' in self._policy_definition:
-            self._rules_indirect_matching = self._policy_definition['ifm']
+        if 'irm' in self._policy_definition:
+            self._rules_indirect_matching = self._policy_definition['irm']
 
     def _get_all_aliases(self):
         """
@@ -188,13 +188,13 @@ class MatchingPolicy:
 
             Raises:
                 exceptions_matching_policy.MatchingRuleNotSupported when the rule_type is different of 'dfm',
-                    'drm' or 'ifm'.
+                    'drm' or 'irm'.
         """
         if rule_type == 'dfm':
             total_rules = len(self._rules_direct_full_matching)
         elif rule_type == 'drm':
             total_rules = len(self._rules_direct_residual_matching)
-        elif rule_type == 'ifm':
+        elif rule_type == 'irm':
             total_rules = len(self._rules_indirect_matching)
         else:
             raise exceptions_matching_policy.MatchingRuleNotSupported
@@ -215,13 +215,13 @@ class MatchingPolicy:
 
             Raises:
                 exceptions_matching_policy.MatchingRuleNotSupported when the rule_type is different of 'dfm',
-                    'drm' or 'ifm'.
+                    'drm' or 'irm'.
         """
         if rule_type == 'dfm':
             return self._rules_direct_full_matching
         elif rule_type == 'drm':
             return self._rules_direct_residual_matching
-        elif rule_type == 'ifm':
+        elif rule_type == 'irm':
             return self._rules_indirect_matching
         else:
             raise exceptions_matching_policy.MatchingRuleNotSupported

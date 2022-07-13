@@ -88,7 +88,7 @@ class DbMatcherDrm(DbMatcher):
                 self._join_condition_builder = self._join_condition_builder.and_condition(join_condition)
                 join_condition = self._join_condition_builder.get_condition()
         tgt_name = self._tgt_source.name
-        tgt_db_name = self._no_matching_source.get_table_column('TGT_NAME')
+        tgt_db_name = self._no_matching_source.get_table_column('tgt_name')
         self._where_condition_builder = self._where_condition_builder.create_condition()
         self._where_condition_builder = self._where_condition_builder.equal_value(tgt_db_name, tgt_name)
         where_condition = self._where_condition_builder.get_condition()
@@ -137,8 +137,8 @@ class DbMatcherDrm(DbMatcher):
                 No exception is raised.
         """
         # Open a session if one does not exist already
-        if not self._db_connector.has_session_open():
-            self._db_connector.create_session()
+        # if not self._db_connector.has_session_open():
+        #    self._db_connector.create_session()
         for rule_key in self._matching_rules:
             # ------ MATCHING PROCESS ------
             # Process positive matchings: this is basically an INSERT into the MATCHING_TABLE taken values
@@ -179,6 +179,6 @@ class DbMatcherDrm(DbMatcher):
             self._dml_manager.delete_data(delete_stm)
 
             # Commit changes
-            self._db_connector.commit_changes()
+            # self._db_connector.commit_changes()
         # Close the session
-        self._db_connector.close_session()
+        # self._db_connector.close_session()
