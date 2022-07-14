@@ -302,7 +302,7 @@ class EtlProcessing:
         self._create_db_source()
 
         # Process the file, by reading it line by line and performing bulk sql insert for speed
-        if self._file.extension == '.csv' and self._file.settings.read_mode=='bulk-sql':
+        if self._file.extension == '.csv' and self._file.settings.read_mode == 'bulk-sql':
             self._process_csv_file_bulk_sql()
 
         # Process the file, by reading it using pandas dataframe in a bulk setup for speed

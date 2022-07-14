@@ -35,6 +35,14 @@ class FileReaderCsv(FileReader):
         self._separator = ','
         self._extension_supported = '.csv'
 
+    @property
+    def separator(self):
+        return self._separator
+
+    @separator.setter
+    def separator(self, new_separator: str):
+        self._separator = new_separator
+
     def _attributes_exist_in_file(self, attribute_names: list):
         """
             Private class method that checks if a list of names exist as attributes to be read from a file.
