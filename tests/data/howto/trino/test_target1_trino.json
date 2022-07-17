@@ -1,0 +1,53 @@
+{
+  "file_processing": {
+    "file_path": "../../../tests/data/test_target1.csv",
+    "file_extension_pattern": "*.csv",
+    "filename_pattern": "test_target1",
+    "encoding": "utf-8",
+    "separator": ",",
+    "read_mode": "bulk-sql"
+  },
+  "data_source": {
+    "name": "ds_tgt1",
+    "table_name": "esg_match_tgt1",
+    "table_schema": "esg_matching",
+    "create_table": "true",
+    "if_table_exists": "drop",
+    "attributes": {
+      "unique_id":  ["unique_id","VARCHAR"],
+      "isin":  ["isin", "VARCHAR", "12"],
+      "lei":  ["lei", "VARCHAR", "20"],
+      "name":  ["company", "VARCHAR", "255"],
+      "country_code": ["country", "VARCHAR", "255"]
+    },
+    "matching_role": "target",
+    "matching_alias": {
+      "isin":  "isin",
+      "lei":  "lei",
+      "company": "company",
+      "country": "country"
+    },
+    "map_to_matching": {
+      "tgt_id":  "unique_id",
+      "isin":  "isin",
+      "lei":  "lei",
+      "tgt_company": "company",
+      "tgt_country": "country"
+    }
+  },
+  "matching_policy": {
+    "matching_with_ref1": {
+      "dfm": {
+        "isin":  ["isin"]
+      } ,
+      "drm": {
+        "name+country":  ["company", "country"]
+      },
+      "irm": {
+        "isin":  ["isin"],
+        "lei":  ["lei"],
+        "name+country":  ["company", "country"]
+      }
+    }
+  }
+}

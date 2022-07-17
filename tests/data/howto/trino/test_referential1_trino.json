@@ -1,0 +1,35 @@
+{
+  "file_processing": {
+    "file_path": "../../../tests/data/test_referential1.csv",
+    "file_extension_pattern": "*.csv",
+    "filename_pattern": "test_referential1",
+    "encoding": "utf-8",
+    "separator": ",",
+    "read_mode": "bulk-sql"
+  },
+  "data_source": {
+    "name": "ds_ref",
+    "table_name": "esg_match_ref",
+    "table_schema": "esg_matching",
+    "create_table": "true",
+    "if_table_exists": "drop",
+    "attributes": {
+      "unique_id":  ["unique_id","VARCHAR"],
+      "isin":  ["isin", "VARCHAR", "12"],
+      "company":  ["company", "VARCHAR", "100"],
+      "country": ["country", "VARCHAR", "100"]
+    },
+    "matching_role": "referential",
+    "matching_alias": {
+      "isin":  "isin",
+      "company": "company",
+      "country": "country"
+    },
+    "map_to_matching": {
+      "ref_id":  "unique_id",
+      "ref_company":  "company",
+      "ref_country":  "country"
+    }
+  }
+}
+

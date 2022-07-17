@@ -1,0 +1,56 @@
+{
+  "file_processing": {
+    "file_path": "../../../tests/data/test_target2.csv",
+    "file_extension_pattern": "*.csv",
+    "filename_pattern": "test_target2",
+    "encoding": "utf-8",
+    "separator": ","
+  },
+  "data_source": {
+    "name": "ds_tgt2",
+    "table_name": "esg_match_tgt2",
+    "create_table": "true",
+    "if_table_exists": "drop",
+    "primary_keys": ["unique_id"],
+    "attributes": {
+      "unique_id":  ["unique_id","int"],
+      "isin":  ["isin", "str"],
+      "lei":  ["lei", "str"],
+      "sedol":  ["sedol", "str"],
+      "company_name":  ["company", "str"],
+      "country": ["country", "str"]
+    },
+    "matching_role": "target",
+    "matching_alias": {
+      "isin":  "isin",
+      "lei":  "lei",
+      "sedol":  "sedol",
+      "company": "company",
+      "country": "country"
+    },
+    "map_to_matching": {
+      "tgt_id":  "unique_id",
+      "isin":  "isin",
+      "lei":  "lei",
+      "sedol":  "sedol",
+      "tgt_company": "company",
+      "tgt_country": "country"
+    }
+  },
+  "matching_policy": {
+    "matching_with_ref1": {
+      "dfm": {
+        "isin":  ["isin"]
+      } ,
+      "drm": {
+        "name+country":  ["company", "country"]
+      },
+      "irm": {
+        "isin":  ["isin"],
+        "lei":  ["lei"],
+        "sedol":  ["sedol"],
+        "name+country":  ["company", "country"]
+      }
+    }
+  }
+}

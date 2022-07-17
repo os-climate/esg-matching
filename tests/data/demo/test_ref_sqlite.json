@@ -1,0 +1,34 @@
+{
+  "file_processing": {
+    "file_path": "../../../tests/data/notebook/demo/test_ref.csv",
+    "file_extension_pattern": "*.csv",
+    "filename_pattern": "test_referential1",
+    "encoding": "utf-8",
+    "separator": ";",
+    "read_mode": "bulk-pd"
+  },
+  "data_source": {
+    "name": "ds_ref",
+    "table_name": "esg_match_ref",
+    "create_table": "True",
+    "if_table_exists": "drop",
+    "primary_keys": ["id_ref"],
+    "attributes": {
+      "ID":  ["id_ref","int"],
+      "LEI":  ["lei_ref", "str"],
+      "COMPANY":  ["name_ref", "str"],
+      "COUNTRY": ["country_ref", "str"]
+    },
+    "matching_role": "referential",
+    "matching_alias": {
+      "LEI":  "lei_ref",
+      "COMPANY": "name_ref",
+      "COUNTRY": "country_ref"
+    },
+    "map_to_matching": {
+      "ref_id":  "id_ref",
+      "ref_company":  "name_ref",
+      "ref_country":  "country_ref"
+    }
+  }
+}

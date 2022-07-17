@@ -1,0 +1,34 @@
+{
+  "data_source": {
+    "name": "ds_matching",
+    "table_name": "esg_matching",
+    "table_schema": "esg_matching",
+    "create_table": "True",
+    "if_table_exists": "drop",
+    "attributes": {
+      "matching_id":  ["matching_id","auto-id"],
+      "ref_name":  ["ref_name","VARCHAR"],
+      "tgt_name":  ["tgt_name","VARCHAR"],
+      "matching_type":  ["matching_type","VARCHAR"],
+      "matching_scope":  ["matching_scope","VARCHAR"],
+      "matching_rule":  ["matching_rule","VARCHAR"],
+      "ref_id":  ["ref_id","VARCHAR"],
+      "ref_company":  ["ref_company", "VARCHAR"],
+      "ref_country": ["ref_country", "VARCHAR"],
+      "tgt_id":  ["tgt_id","VARCHAR"],
+      "tgt_company":  ["tgt_company", "VARCHAR"],
+      "tgt_country": ["tgt_country", "VARCHAR"],
+      "isin":  ["isin", "VARCHAR"],
+      "lei":  ["lei", "VARCHAR"],
+      "sedol":  ["sedol", "VARCHAR"]
+    },
+    "matching_role": "matching",
+    "matching_id": "matching_id",
+    "map_indirect_matching": {
+      "ref_name":  "tgt_name",
+      "ref_id":  "tgt_id",
+      "ref_company":  "tgt_company",
+      "ref_country":  "tgt_country"
+    }
+  }
+}

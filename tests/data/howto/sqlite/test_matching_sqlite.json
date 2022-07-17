@@ -1,0 +1,34 @@
+{
+  "data_source": {
+    "name": "ds_matching",
+    "table_name": "esg_matching",
+    "create_table": "true",
+    "if_table_exists": "drop",
+    "attributes": {
+      "timestamp":  ["timestamp","auto-timestamp"],
+      "matching_id":  ["matching_id","auto-id"],
+      "ref_name":  ["ref_name","str"],
+      "tgt_name":  ["tgt_name","str"],
+      "matching_type":  ["matching_type","str"],
+      "matching_scope":  ["matching_scope","str"],
+      "matching_rule":  ["matching_rule","str"],
+      "ref_id":  ["ref_id","int"],
+      "ref_company":  ["ref_company", "str"],
+      "ref_country": ["ref_country", "str"],
+      "tgt_id":  ["tgt_id","int"],
+      "tgt_company":  ["tgt_company", "str"],
+      "tgt_country": ["tgt_country", "str"],
+      "isin":  ["isin", "str"],
+      "lei":  ["lei", "str"],
+      "sedol":  ["sedol", "str"]
+    },
+    "matching_role": "matching",
+    "matching_id": "matching_id",
+    "map_indirect_matching": {
+      "ref_name":  "tgt_name",
+      "ref_id":  "tgt_id",
+      "ref_company":  "tgt_company",
+      "ref_country":  "tgt_country"
+    }
+  }
+}
