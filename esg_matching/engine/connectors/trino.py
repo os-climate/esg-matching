@@ -151,7 +151,7 @@ class TrinoConnector(DbConnector):
                 the trino database object types: VARCHAR, DECIMAL, CHAR, DATE
 
         """
-        if str_type == 'VARCHAR':
+        if str_type == 'str' or str_type == 'VARCHAR':
             if size > 0:
                 return sa.String(size)
             else:
@@ -185,8 +185,9 @@ class TrinoConnector(DbConnector):
 
     def get_auto_pk_column(self, column_name):
         """
-            Class method that overrides the super class method to reflect the creation of autoincrement and primary
-             keys supported by oracle database.
+            Class method that creates an autoincrement primary key database column accoding to the connectors dialect.
+            This method might be overridden by subclasses because databases usually have differents ways to create
+             automatic primary keys columns.
 
             Parameters:
                 No parameters.
@@ -197,7 +198,7 @@ class TrinoConnector(DbConnector):
             Raises:
                 No exception is raised.
         """
-        column_object = sa.Column(column_name, sa.Integer, sa.Identity(start=1), primary_key=True)
+        column_object = sa.Column(column_name, sa.Integer, primary_key=False, autoincrement=True)
         return column_object
 
     def get_auto_timestamp_column(self, column_name):
