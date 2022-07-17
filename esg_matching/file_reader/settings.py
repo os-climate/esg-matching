@@ -65,6 +65,7 @@ class JsonSettings:
 
         # Data source settings
         self.datasource_name = 'unknown'
+        self.datasource_table_schema = None
         self.datasource_table_name = 'unknown'
         self.datasource_create_table = True
         self.datasource_if_table_exists = 'drop'
@@ -150,10 +151,12 @@ class JsonSettings:
             sub_dict = settings_json['data_source']
             if 'name' in sub_dict:
                 self.datasource_name = sub_dict['name']
+            if 'table_schema' in sub_dict:
+                self.datasource_table_schema = sub_dict['table_schema']
             if 'table_name' in sub_dict:
                 self.datasource_table_name = sub_dict['table_name']
             if 'create_table' in sub_dict:
-                self.datasource_create_table = eval(sub_dict['create_table'])
+                self.datasource_create_table = eval(str(sub_dict['create_table']).title())
             if 'if_table_exists' in sub_dict:
                 value_dict = sub_dict['if_table_exists']
                 if value_dict != 'drop' and value_dict != 'clean':

@@ -114,12 +114,13 @@ class EtlProcessing:
             self._data_source.match_type = self._file.settings.matching_role
             self._data_source.matching_id = self._file.settings.matching_id
             self._data_source.map_indirect_matching = self._file.settings.map_indirect_matching
+        self._data_source.table_schema = self._file.settings.datasource_table_schema
         self._data_source.table_name = self._file.settings.datasource_table_name
         self._data_source.matching_role = self._file.settings.matching_role
         self._data_source.policy_name = self._file.settings.policy_name
 
         # If table exists
-        if self._db_connector.table_exists(self._data_source.table_name):
+        if self._db_connector.table_exists(self._data_source.table_name, self._data_source.table_schema):
             self._data_source.sync_with_db_table()
             # ...drop it
             if self._file.settings.datasource_if_table_exists == 'drop':
@@ -154,12 +155,12 @@ class EtlProcessing:
                 No exception is raised.
         """
 
-        if self._file.settings.datasource_attributes is not None:
-            columns_data_source = self._get_columns_from_settings()
-        else:
+        if self._file.settings.datasource_attributes is None:
             columns_data_source = self._get_standard_columns()
+        else:
+            columns_data_source = self._get_columns_from_settings()
 
-        self._data_source.create_table(self._data_source.table_name, columns_data_source)
+        self._data_source.create_table(db_columns=columns_data_source)
 
     def _get_columns_from_settings(self):
         """

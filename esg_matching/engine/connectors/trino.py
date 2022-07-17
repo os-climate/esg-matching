@@ -19,15 +19,19 @@ class TrinoConnector(DbConnector):
     __HTTP_STD_SCHEME = "https"
     __VERIFY_FLAG = True
 
-    def __init__(self):
+    def __init__(self, engine=None):
         super().__init__()
 
-        self._username = ''
-        self._user_password = ''
-        self._host_url = ''
+        self._username = None
+        self._user_password = None
+        self._host_url = None
         self._port_number = 443
+        self._catalog = None
         self._http_scheme = self.__HTTP_STD_SCHEME
         self._verify = self.__VERIFY_FLAG
+
+        if not (engine is None):
+            self._engine = engine
 
     @property
     def username(self):
@@ -62,6 +66,14 @@ class TrinoConnector(DbConnector):
         self._port_number = port_number
 
     @property
+    def catalog(self):
+        return self._catalog
+
+    @catalog.setter
+    def catalog(self, new_catalog: str):
+        self._catalog = new_catalog
+
+    @property
     def http_scheme(self):
         return self._http_scheme
 
@@ -86,6 +98,8 @@ class TrinoConnector(DbConnector):
         # The basic trino connection string follows the pattern below:
         # trino://username@host_url:port_number
         self._string_connection = 'trino://{0}@{1}:{2}'.format(self._username, self._host_url, self._port_number)
+        if self._catalog is not None:
+            self._string_connection += f"/{self._catalog}"
 
     def _is_ready_to_connect(self):
         """
@@ -144,7 +158,7 @@ class TrinoConnector(DbConnector):
                 return sa.String
 
         if str_type == 'INTEGER':
-            return sa.Integer
+            return sa.BigInteger
 
         if str_type == 'DECIMAL':
             return sa.DECIMAL
@@ -160,6 +174,9 @@ class TrinoConnector(DbConnector):
 
         if str_type == 'TIME':
             return sa.Time
+
+        if str_type == 'TIMESTAMP':
+            return sa.TIMESTAMP
 
         if str_type == 'DATE_TIME':
             return sa.DateTime

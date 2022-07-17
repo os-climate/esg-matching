@@ -299,7 +299,7 @@ class DbConnector(ABC):
 
         table_obj.drop(self._engine)
 
-    def table_exists(self, table_name: str):
+    def table_exists(self, table_name: str, table_schema: str = None):
         """
             Class method that checks if a table exists in the database.
             This method may need to be overridden by subclasses since some databases may not support direct
@@ -307,6 +307,7 @@ class DbConnector(ABC):
 
             Parameters:
                 table_name (str): name of the table
+                table_schema (str): table schema, used to connect to databases such as Trino
 
             Returns:
                 True if the table exists in the database or False otherwise.
@@ -317,16 +318,24 @@ class DbConnector(ABC):
         if not self.is_connected():
             raise exceptions_db_engine.ConnectionNotDefined
 
-        result = sa.inspect(self._engine).has_table(table_name)
+        if table_schema is None:
+            metadata = sa.MetaData(self._engine)
+            result = sa.inspect(metadata.bind).has_table(table_name)
+        else:
+            inspector = sa.inspect(self._engine)
+            tables_in_schema = inspector.get_table_names(schema=table_schema)
+            result = table_name in tables_in_schema
+
         return result
 
-    def get_table_from_metadata(self, table_name: str):
+    def get_table_from_metadata(self, table_name: str, schema=None):
         """
             This class method uses reflection to explicitly get the metadata object of a database table.
             The metadata structure is composed by the table name and its attributes (name, type and properties).
 
             Parameters:
                 table_name (str): name of the table from where to retrieve the metadata structure.
+                schema (str): schema where the table is located (depend on the database used)
 
             Returns:
                 table_obj (sqlalchemy.sql.schema.Table): metadata object that represents the table in the database
@@ -338,7 +347,11 @@ class DbConnector(ABC):
             raise exceptions_db_engine.ConnectionNotDefined
 
         # Create metaData instance for the engine
-        metadata = sa.MetaData(self._engine)
+        if schema is None:
+            metadata = sa.MetaData(self._engine)
+        else:
+            metadata = sa.MetaData(schema=schema)
+            metadata.reflect(self._engine)
 
         # Get the Table metadata object
         table_obj = sa.Table(table_name, metadata, autoload=True, autoload_with=self._engine)

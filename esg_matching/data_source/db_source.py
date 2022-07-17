@@ -17,6 +17,7 @@ class DbDataSource:
 
     def __init__(self, db_connector: DbConnector, name: str):
         self._db_connector = db_connector
+        self._table_schema = None
         self._table_name = ''
         self._table_obj = None
         self._name = name
@@ -38,6 +39,14 @@ class DbDataSource:
     @name.setter
     def name(self, new_name: str):
         self._name = new_name
+
+    @property
+    def table_schema(self):
+        return self._table_schema
+
+    @table_schema.setter
+    def table_schema(self, new_table_schema: str):
+        self._table_schema = new_table_schema
 
     @property
     def table_name(self):
@@ -527,23 +536,22 @@ class DbDataSource:
             raise exceptions_data_source.TableNameNotInformed
 
         # Update the metadata table object
-        self._table_obj = self._db_connector.get_table_from_metadata(self._table_name)
+        self._table_obj = self._db_connector.get_table_from_metadata(self._table_name, self._table_schema)
         if set_pks:
             self._set_primary_keys()
         if set_original_fields:
             self._set_original_attributes_from_table()
 
-    def create_table(self, table_name: str, db_columns: list):
+    def create_table(self, db_columns: list):
         """
             Class method that creates a table for the datasource given a list of object columns.
 
             Parameters:
-                table_name (str): table name
                 db_columns (list): a list of columns (sqlalchemy.sql.schema.Column)
         """
         table_builder = TableBuilder(self._db_connector)
-        table_object = table_builder.create_table(table_name).add_columns(db_columns).execute()
-        self._table_name = table_name
+        table_builder = table_builder.create_table(self._table_name, self._table_schema).add_columns(db_columns)
+        table_object = table_builder.execute()
         self._table_obj = table_object
         self._set_primary_keys()
 
@@ -613,6 +621,7 @@ class DbDataSource:
                 row_db[db_field_name] = self._db_connector.get_null_value()
             else:
                 row_db[db_field_name] = field_value
+        print(row_db)
         self._dml_manager.insert_row(self._table_obj, row_db)
 
     def get_total_entries(self):

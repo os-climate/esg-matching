@@ -178,14 +178,13 @@ class DbMatchDataSource(DbDataSource):
             self._table_obj = None
             raise exceptions_data_source.StandardMatchingAttributeMissingInDatabaseTable
 
-    def create_table(self, table_name: str, db_columns: list):
+    def create_table(self, db_columns: list):
         """
             Overrides the method that creates a table for the datasource given a list of object columns. This method
             verifies if the standard attributes of the matching table are present as a column in the list sent
             as parameter.
 
             Parameters:
-                table_name (str): table name
                 db_columns (list): a list of columns (sqlalchemy.sql.schema.Column)
 
             Raises:
@@ -203,7 +202,7 @@ class DbMatchDataSource(DbDataSource):
             raise exceptions_data_source.StandardMatchingAttributeMissingInDatabaseTable
 
         # The verification is fine...calls the parent method
-        super().create_table(table_name, db_columns)
+        super().create_table(db_columns)
 
     def create_table_from_df(self, table_name: str, df: pd.DataFrame):
         """

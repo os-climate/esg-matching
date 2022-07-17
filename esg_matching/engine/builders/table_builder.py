@@ -2,7 +2,7 @@
 
 # Import third-party libraries
 import sqlalchemy as sa
-from sqlalchemy import MetaData, Table
+from sqlalchemy import Table
 
 # Import internal modules
 from esg_matching.exceptions import exceptions_db_engine, exceptions_builders
@@ -42,6 +42,7 @@ class TableBuilder:
         self._db_connector = db_connector
         self._column_builder = ColumnBuilder(db_connector)
         self._table_name = ''
+        self._table_schema = None
         self._columns = []
         self._df = None
 
@@ -62,12 +63,13 @@ class TableBuilder:
         self._columns = []
         self._df = None
 
-    def create_table(self, table_name: str):
+    def create_table(self, table_name: str, table_schema: str = None):
         """
             Sets up the table name used by the builders.
 
             Parameters:
                 table_name (str): the table name.
+                table_schema (str): the table schema in a database such as Trino.
 
             Returns:
                 No return values
@@ -77,6 +79,7 @@ class TableBuilder:
         """
         self.reset_builder()
         self._table_name = table_name
+        self._table_schema = table_schema
         return self
 
     def add_columns(self, table_columns: list):
@@ -117,10 +120,13 @@ class TableBuilder:
             raise exceptions_builders.TableNameNotDefine
 
         # Define the metadata as default
-        meta = MetaData(self._db_connector.engine)
+        if self._table_schema is None:
+            metadata = sa.MetaData(self._db_connector.engine)
+        else:
+            metadata = sa.MetaData(self._db_connector.engine, schema=self._table_schema)
 
         # Creates a new table object with the column names and types provided
-        new_table = Table(self._table_name, meta, *self._columns)
+        new_table = Table(self._table_name, metadata, *self._columns)
         new_table.create()
         return new_table
 
