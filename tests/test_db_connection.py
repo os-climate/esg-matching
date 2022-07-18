@@ -1,7 +1,7 @@
 from unittest import TestCase, TestSuite, TextTestRunner
 
 # Import the module for connection to a sqllite database
-from esg_matching.db_engine.engines.connector_sql_lite import SqlLiteConnector
+from esg_matching.engine.connectors.sql_lite import SqlLiteConnector
 
 
 # Localization of the database to be created during the test

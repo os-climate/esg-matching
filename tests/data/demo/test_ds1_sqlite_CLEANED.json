@@ -1,0 +1,53 @@
+{
+  "file_processing": {
+    "file_path": "../../tests/data/demo/test_ds1_CLEAN.csv",
+    "file_extension_pattern": "*.csv",
+    "filename_pattern": "test_target1",
+    "encoding": "utf-8",
+    "separator": ";",
+    "read_mode": "bulk-pd"
+  },
+  "data_source": {
+    "name": "ds_tgt1",
+    "table_name": "esg_match_tgt1",
+    "create_table": "True",
+    "if_table_exists": "drop",
+    "primary_keys": ["id_ds1"],
+    "attributes": {
+      "ID":  ["id_ds1","int"],
+      "ISIN":  ["isin_ds1", "str"],
+      "LEI":  ["lei_ds1", "str"],
+      "ENTITY_CLEAN":  ["name_ds1", "str"],
+      "CLEAN_ALPHA2": ["country_ds1", "str"]
+    },
+    "matching_role": "target",
+    "matching_alias": {
+      "ISIN":  "isin_ds1",
+      "LEI":  "lei_ds1",
+      "COMPANY": "name_ds1",
+      "COUNTRY": "country_ds1"
+    },
+    "map_to_matching": {
+      "tgt_id":  "id_ds1",
+      "isin":  "isin_ds1",
+      "lei":  "lei_ds1",
+      "tgt_company": "name_ds1",
+      "tgt_country": "country_ds1"
+    }
+  },
+  "matching_policy": {
+    "matching_with_ref1": {
+      "dfm": {
+        "lei":  ["LEI"]
+      } ,
+      "drm": {
+        "name+country":  ["COMPANY", "COUNTRY"]
+      },
+      "irm": {
+        "lei":  ["LEI"],
+        "isin":  ["ISIN"],
+        "name+country":  ["COMPANY", "COUNTRY"]
+      }
+    }
+  }
+}

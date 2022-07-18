@@ -1,0 +1,21 @@
+{
+  "data_source": {
+    "name": "ds_no_matching",
+    "table_name": "esg_no_matching",
+    "create_table": "true",
+    "if_table_exists": "drop",
+    "attributes": {
+      "timestamp":  ["timestamp","auto-timestamp"],
+      "matching_id":  ["matching_id","auto-id"],
+      "tgt_name":  ["tgt_name","str"],
+      "tgt_id":  ["tgt_id","int"],
+      "tgt_company":  ["tgt_company", "str"],
+      "tgt_country": ["tgt_country", "str"],
+      "isin":  ["isin", "str"],
+      "lei":  ["lei", "str"],
+      "sedol":  ["sedol", "str"]
+    },
+    "matching_role": "no-matching",
+    "matching_id": "matching_id"
+  }
+}

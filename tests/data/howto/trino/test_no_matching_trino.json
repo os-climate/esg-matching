@@ -1,0 +1,21 @@
+{
+  "data_source": {
+    "name": "ds_no_matching",
+    "table_name": "esg_no_matching",
+    "table_schema": "esg_matching",
+    "create_table": "True",
+    "if_table_exists": "drop",
+    "attributes": {
+      "matching_id":  ["matching_id","INTEGER"],
+      "tgt_name":  ["tgt_name","VARCHAR"],
+      "tgt_id":  ["tgt_id","VARCHAR"],
+      "tgt_company":  ["tgt_company", "VARCHAR"],
+      "tgt_country": ["tgt_country", "VARCHAR"],
+      "isin":  ["isin", "VARCHAR"],
+      "lei":  ["lei", "VARCHAR"],
+      "sedol":  ["sedol", "VARCHAR"]
+    },
+    "matching_role": "no-matching",
+    "matching_id": "matching_id"
+  }
+}
