@@ -198,7 +198,7 @@ class TrinoConnector(DbConnector):
             Raises:
                 No exception is raised.
         """
-        column_object = sa.Column(column_name, sa.Integer, primary_key=False, autoincrement=True)
+        column_object = sa.Column(column_name, sa.Integer, server_default=sa.func.row_number())
         return column_object
 
     def get_auto_timestamp_column(self, column_name):

@@ -6,7 +6,7 @@
     "create_table": "True",
     "if_table_exists": "drop",
     "attributes": {
-      "matching_id":  ["matching_id","auto-id"],
+      "matching_id":  ["matching_id","INTEGER"],
       "tgt_name":  ["tgt_name","VARCHAR"],
       "tgt_id":  ["tgt_id","VARCHAR"],
       "tgt_company":  ["tgt_company", "VARCHAR"],
