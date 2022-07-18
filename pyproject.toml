@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "esg-matching"
-version = "0.0.1"
+version = "0.2.0"
 description = "Entity matching of several data sources"
 authors = ["Os-Climate Foundation <test_os-climate@gmail.com>"]
 license = "Apache 2"
