@@ -2,6 +2,7 @@
 
 # Import third-party libraries
 import trino
+import trino.sqlalchemy.datatype as trino_dt
 import sqlalchemy as sa
 from sqlalchemy.engine import create_engine
 
@@ -176,7 +177,10 @@ class TrinoConnector(DbConnector):
             return sa.Time
 
         if str_type == 'TIMESTAMP':
-            return sa.TIMESTAMP
+            if size > 0:
+                return trino_dt.TIMESTAMP(precision=size)
+            else:
+                return trino_dt.TIMESTAMP
 
         if str_type == 'DATE_TIME':
             return sa.DateTime

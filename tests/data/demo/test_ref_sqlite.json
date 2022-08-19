@@ -1,6 +1,6 @@
 {
   "file_processing": {
-    "file_path": "../../../tests/data/notebook/demo/test_ref.csv",
+    "file_path": "../../tests/data/notebook/demo/test_ref.csv",
     "file_extension_pattern": "*.csv",
     "filename_pattern": "test_referential1",
     "encoding": "utf-8",

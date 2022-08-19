@@ -6,6 +6,7 @@
     "create_table": "True",
     "if_table_exists": "drop",
     "attributes": {
+      "timestamp":  ["timestamp","TIMESTAMP", "6"],
       "matching_id":  ["matching_id","INTEGER"],
       "ref_name":  ["ref_name","VARCHAR"],
       "tgt_name":  ["tgt_name","VARCHAR"],

@@ -46,7 +46,7 @@ python = ">=3.8,<3.11"
 SQLAlchemy = ">=1.4.21"
 cx_Oracle = ">=8.3.0"
 pandas = ">=1.4.0"
-sqlalchemy-trino = ">=0.4.1"
+"trino[sqlalchemy]" = ">=0.314.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
