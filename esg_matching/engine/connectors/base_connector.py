@@ -319,7 +319,7 @@ class DbConnector(ABC):
             raise exceptions_db_engine.ConnectionNotDefined
 
         if table_schema is None:
-            metadata = sa.MetaData(self._engine)
+            metadata = sa.MetaData(bind=self._engine)
             result = sa.inspect(metadata.bind).has_table(table_name)
         else:
             inspector = sa.inspect(self._engine)
